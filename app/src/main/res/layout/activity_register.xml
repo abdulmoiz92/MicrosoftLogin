@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0D1C30"
+    tools:context=".Register">
+
+    <RelativeLayout
+        android:id="@+id/logodiv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/microsoft" />
+
+            <TextView
+                android:id="@+id/error_message"
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Please ReCheck Your Name, Email Address or Password &amp; Try Again"
+                android:visibility="invisible"
+                android:textColor="#fff"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/formsdiv"
+        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logodiv">
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/register_name"
+                android:layout_width="250dp"
+                android:backgroundTint="#fff"
+                android:hint="Name"
+                android:textColor="#fff"
+                android:inputType="textPersonName"
+                android:drawableEnd="@drawable/ic_person_black_24dp"
+                android:textColorHint="#fff"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/register_email"
+                android:layout_width="250dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#fff"
+                android:textColor="#fff"
+                android:hint="Email Address"
+                android:inputType="textEmailAddress"
+                android:drawableEnd="@drawable/ic_email_black_24dp"
+                android:textColorHint="#fff"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/register_password"
+                android:layout_width="250dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#fff"
+                android:textColor="#fff"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:drawableEnd="@drawable/ic_lock_black_24dp"
+                android:textColorHint="#fff"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/register_confirm_password"
+                android:layout_width="250dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#fff"
+                android:textColor="#fff"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:drawableEnd="@drawable/ic_build_black_24dp"
+                android:textColorHint="#fff"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttons"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/formsdiv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/register_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#1c4966"
+                android:text="Register"
+                android:onClick="direct_to_login"
+                android:textColor="#fff"/>
+
+            <Button
+                android:id="@+id/already_have_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/transparent"
+                android:textColor="#fff"
+                android:onClick="already_have_account"
+                android:text="Already Have an Account"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
