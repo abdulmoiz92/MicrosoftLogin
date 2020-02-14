@@ -7,18 +7,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.microsftlogin.Helpers.SharedPrefrenceHelper;
+import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
+
+import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.IS_FIRST_TIME_LAUNCH;
+import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.IS_LOGIN;
+import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_EMAIL;
+import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_PASSWORD;
 
 public class MainActivity extends AppCompatActivity {
 
     SharedPrefrenceHelper sph = new SharedPrefrenceHelper();
-    private static final int TEXT_REQUEST = 1;
+    //private static final int TEXT_REQUEST = 1;
     private TextView login_email;
     private EditText login_password;
     private String email_pref;
@@ -30,28 +35,40 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sph.mprefrences = getSharedPreferences(sph.getSharedfile(),MODE_PRIVATE);
-        login_email = findViewById(R.id.email);
-        login_password = findViewById(R.id.password);
-        login_error_message = findViewById(R.id.login_error);
 
-        Bundle bundle = getIntent().getExtras();
-        if(null != bundle){
-
-            Toast.makeText(this, "Registered Successfully", Toast.LENGTH_LONG).show();
-            sph.getSpBoolean(sph.getLogin_key(),false);
-            login_email.setText(sph.getSpString(sph.getEmail_Key()));
-            login_password.setText(sph.getSpString(sph.getPassword_Key()));
-
+        if (!SharedPrefrenceUtil.getInstance(getApplicationContext()).getBooleanValue(IS_FIRST_TIME_LAUNCH)) {
+            Intent splashScreen = new Intent(this, SplashScreen.class);
+            startActivity(splashScreen);
         }
 
-        email_pref = sph.getSpString(sph.getEmail_Key());
-        password_pref = sph.getSpString(sph.getPassword_Key());
+        else if (SharedPrefrenceUtil.getInstance(getApplicationContext()).getBooleanValue(IS_LOGIN)) {
+            Intent homePage = new Intent(MainActivity.this, HomePage.class);
+            //homePage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(homePage);
+        }
 
+        else {
+
+            login_email = findViewById(R.id.email);
+            login_password = findViewById(R.id.password);
+            login_error_message = findViewById(R.id.login_error);
+
+            Bundle bundle = getIntent().getExtras();
+            if (null != bundle) {
+
+                Toast.makeText(this, "Registered Successfully", Toast.LENGTH_LONG).show();
+                login_email.setText(SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_EMAIL));
+                login_password.setText(SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_PASSWORD));
+
+            }
+
+            email_pref = SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_EMAIL);
+            password_pref = SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_PASSWORD);
+        }
     }
 
     public void direct_to_register(View view) {
-        Intent intent = new Intent(MainActivity.this,Register.class);
+        Intent intent = new Intent(MainActivity.this, Register.class);
         startActivity(intent);
         //startActivityForResult(intent,TEXT_REQUEST);
     }
@@ -71,21 +88,21 @@ public class MainActivity extends AppCompatActivity {
     public void openlogowebsite(View view) {
         String Url = "https://www.microsoft.com/";
         Uri webpage = Uri.parse(Url);
-        Intent intent = new Intent(Intent.ACTION_VIEW,webpage);
-        if (intent.resolveActivity(getPackageManager()) !=null ) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            Toast.makeText(this,"Server Is Busy Please Try Again Later",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Server Is Busy Please Try Again Later", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void check_login_details(View view) {
         String email = login_email.getText().toString();
         String password = login_password.getText().toString();
-        if (!email.equals("") && email.equals(email_pref) && !password.equals("") && password.equals(password_pref) ) {
-            Intent loginintent = new Intent(MainActivity.this,HomePage.class);
-            sph.setIslogin(true);
-            sph.editSpBoolean(sph.getLogin_key(), sph.getisLogin());
+        if (!email.equals("") && email.equals(email_pref) && !password.equals("") && password.equals(password_pref)) {
+            Intent loginintent = new Intent(MainActivity.this, HomePage.class);
+            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(IS_LOGIN,true);
+            loginintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(loginintent);
         } else {
             login_error_message.setVisibility(View.VISIBLE);
@@ -95,6 +112,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean("IsUserLogin",sph.getisLogin());
+        outState.putBoolean("IsUserLogin", sph.getisLogin());
     }
 }

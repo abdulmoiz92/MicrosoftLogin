@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0D1C30"
+    android:background="#FFF"
     tools:context=".Register">
 
     <RelativeLayout
@@ -16,17 +16,18 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:gravity="center_horizontal"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:layout_height="wrap_content">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/microsoft" />
+                android:src="@drawable/photoshop" />
 
             <TextView
                 android:id="@+id/error_message"
                 android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -41,7 +42,6 @@
 
     <RelativeLayout
         android:id="@+id/formsdiv"
-        android:layout_marginTop="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/logodiv">
@@ -54,48 +54,68 @@
             <EditText
                 android:id="@+id/register_name"
                 android:layout_width="250dp"
-                android:backgroundTint="#fff"
+                android:background="@drawable/edittextbackground"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="30dp"
                 android:hint="Name"
-                android:textColor="#fff"
+                android:foregroundTint="@android:color/transparent"
+                android:foreground="#FFF"
+                android:textColor="#B9B9B9"
                 android:inputType="textPersonName"
-                android:drawableEnd="@drawable/ic_person_black_24dp"
-                android:textColorHint="#fff"
+                android:textColorHint="#B9B9B9"
                 android:layout_height="wrap_content"/>
 
             <EditText
                 android:id="@+id/register_email"
                 android:layout_width="250dp"
                 android:layout_marginTop="20dp"
-                android:backgroundTint="#fff"
-                android:textColor="#fff"
+                android:background="@drawable/edittextbackground"
+                android:foregroundTint="@android:color/transparent"
+                android:foreground="#FFF"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="30dp"
+                android:textColor="#B9B9B9"
                 android:hint="Email Address"
                 android:inputType="textEmailAddress"
-                android:drawableEnd="@drawable/ic_email_black_24dp"
-                android:textColorHint="#fff"
+                android:textColorHint="#B9B9B9"
                 android:layout_height="wrap_content"/>
 
             <EditText
                 android:id="@+id/register_password"
                 android:layout_width="250dp"
                 android:layout_marginTop="20dp"
-                android:backgroundTint="#fff"
-                android:textColor="#fff"
+                android:background="@drawable/edittextbackground"
+                android:foregroundTint="@android:color/transparent"
+                android:foreground="#FFF"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="30dp"
+                android:textColor="#B9B9B9"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:drawableEnd="@drawable/ic_lock_black_24dp"
-                android:textColorHint="#fff"
+                android:textColorHint="#B9B9B9"
                 android:layout_height="wrap_content"/>
 
             <EditText
                 android:id="@+id/register_confirm_password"
                 android:layout_width="250dp"
                 android:layout_marginTop="20dp"
-                android:backgroundTint="#fff"
-                android:textColor="#fff"
+                android:background="@drawable/edittextbackground"
+                android:foregroundTint="@android:color/transparent"
+                android:foreground="#FFF"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="30dp"
+                android:textColor="#B9B9B9"
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
-                android:drawableEnd="@drawable/ic_build_black_24dp"
-                android:textColorHint="#fff"
+                android:textColorHint="#B9B9B9"
                 android:layout_height="wrap_content"/>
 
 
@@ -117,20 +137,20 @@
 
             <Button
                 android:id="@+id/register_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
-                android:background="#1c4966"
+                android:background="#7E00FD"
                 android:text="Register"
                 android:onClick="direct_to_login"
                 android:textColor="#fff"/>
 
             <Button
                 android:id="@+id/already_have_account"
-                android:layout_width="wrap_content"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:background="@android:color/transparent"
-                android:textColor="#fff"
+                android:background="@drawable/loginbuttonbg"
+                android:textColor="#AB3FFF"
                 android:onClick="already_have_account"
                 android:text="Already Have an Account"/>
 

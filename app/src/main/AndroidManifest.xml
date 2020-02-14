@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.microsftlogin">
 
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,14 +16,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
-        <activity android:name=".HomePage"></activity>
-        <activity android:name=".SplashScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".LandingPage"></activity>
+        <activity android:name=".IntroScreens.WelcomeActivity"></activity>
+        <activity
+            android:name=".dashboardsActivities.EditProfile"
+            android:noHistory="true" />
+        <activity
+            android:name=".dashboardsActivities.TodolistFragment"
+            android:noHistory="true" />
+        <activity
+            android:name=".dashboardsActivities.CalendarFragment"
+            android:noHistory="true" />
+        <activity
+            android:name=".HomePage"
+            android:noHistory="true" />
+        <activity
+            android:name=".SplashScreen"
+            android:noHistory="true" />
         <activity
             android:name=".Register"
             android:label="Register"
@@ -25,7 +42,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.microsftlogin.MainActivity" />
         </activity>
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

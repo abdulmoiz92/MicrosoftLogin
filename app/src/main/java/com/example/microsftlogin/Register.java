@@ -4,17 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.microsftlogin.Helpers.SharedPrefrenceHelper;
+import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_EMAIL;
+import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_NAME;
+import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_PASSWORD;
 
 public class Register extends AppCompatActivity {
 
@@ -28,7 +31,6 @@ public class Register extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.SplashTheme);
         setContentView(R.layout.activity_register);
         sph.mprefrences = getSharedPreferences(sph.getSharedfile(),MODE_PRIVATE);
         register_name = findViewById(R.id.register_name);
@@ -67,9 +69,9 @@ public class Register extends AppCompatActivity {
            // setResult(RESULT_OK, register_intent);
 
 
-            sph.editSpString(sph.getPerson_name(),name);
-            sph.editSpString(sph.getEmail_Key(),email);
-            sph.editSpString(sph.getPassword_Key(),password);
+            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(USER_NAME, name);
+            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(USER_EMAIL, email);
+            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(USER_PASSWORD, password);
 
             finish();
         } else {
