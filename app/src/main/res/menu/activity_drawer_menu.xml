@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_dashboard"
+            android:icon="@drawable/speedometer"
+            android:title="Dashboard"/>
+
+        <item
+            android:id="@+id/nav_todolist"
+            android:icon="@drawable/list"
+            android:title="Todo List" />
+        <item
+            android:id="@+id/nav_reports"
+            android:icon="@drawable/report"
+            android:title="Reports" />
+
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/calendar"
+            android:title="Calendar" />
+
+        <item
+            android:id="@+id/nav_user"
+            android:icon="@drawable/user"
+            android:title="Update User Info" />
+
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/gears"
+            android:title="Setting" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/logout"
+            android:title="Logout" />
+
+
+    </group>
+
+</menu>

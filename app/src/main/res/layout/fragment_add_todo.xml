@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".dashboardsActivities.AddTodoFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/addtodo_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:lineHeight="70dp"
+        android:text="Add New \nTask"
+        android:textSize="40dp"
+        />
+
+    <EditText
+        android:id="@+id/addtodo_task"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Your Task Here"
+        app:layout_constraintTop_toBottomOf="@id/addtodo_heading"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="50dp"
+        android:paddingBottom="40dp"
+        />
+
+    <TextView
+        android:id="@+id/addtodo_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:layout_marginTop="20dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/addtodo_datebtn"
+        app:layout_constraintTop_toBottomOf="@+id/addtodo_task" />
+
+
+    <Button
+        android:id="@+id/addtodo_datebtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/loginbuttonbg"
+        app:layout_constraintTop_toBottomOf="@id/addtodo_date"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="Select Date"
+        android:layout_marginTop="10dp"
+        android:textColor="#AB3FFF"
+        />
+
+    <Button
+        android:id="@+id/addtodo_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="30dp"
+        android:background="#7E00FD"
+        android:textColor="#fff"
+        android:text="Add Todo"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
