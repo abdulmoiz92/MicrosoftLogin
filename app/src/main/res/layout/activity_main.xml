@@ -4,17 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="#7E00FD"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:onClick="openlogowebsite"
         android:src="@drawable/photoshop"
-        android:layout_marginTop="70dp"
-        app:layout_constraintBottom_toTopOf="@+id/email"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +25,6 @@
         android:text="Your Email Or Password Is Not Correct, Please Try Again"
         android:textColor="#B9B9B9"
         app:layout_constraintTop_toBottomOf="@id/logo"
-        app:layout_constraintBottom_toTopOf="@id/email"
         android:textAlignment="center"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
@@ -34,64 +32,93 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
-    <EditText
-        android:id="@+id/email"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/formscard"
         android:layout_width="0dp"
+        app:cardBackgroundColor="#fff"
+        app:cardCornerRadius="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="16dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="30dp"
-        android:background="@drawable/edittextbackground"
-        android:foregroundTint="@android:color/transparent"
-        android:foreground="@android:color/transparent"
-        android:ems="10"
-        android:hint="Email Address"
-        android:inputType="textEmailAddress"
-        android:textColor="#000"
-        android:textColorHint="#B9B9B9"
-        app:layout_constraintBottom_toTopOf="@id/password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        >
 
-    <EditText
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            >
+
+         <LinearLayout
+             android:id="@+id/logincarddiv"
+             android:layout_width="0dp"
+             android:gravity="center"
+             android:layout_marginTop="20dp"
+             app:layout_constraintLeft_toLeftOf="parent"
+             app:layout_constraintRight_toRightOf="parent"
+             app:layout_constraintTop_toTopOf="parent"
+             android:orientation="vertical"
+             android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            style="@style/EditTextStyle"
+            app:boxCornerRadiusBottomStart="30dp"
+            app:boxCornerRadiusTopStart="30dp"
+            app:boxCornerRadiusTopEnd="30dp"
+            app:boxCornerRadiusBottomEnd="30dp"
+            android:hint="Email Address">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password"
-        android:layout_width="0dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="32dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="30dp"
-        android:background="@drawable/edittextbackground"
-        android:foregroundTint="@android:color/transparent"
-        android:foreground="@android:color/transparent"
-        android:ems="10"
-        android:hint="Password"
-        android:textColor="#B9B9B9"
-        android:inputType="textPassword"
-        android:textColorHint="#B9B9B9"
-        app:layout_constraintBottom_toTopOf="@id/login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:boxCornerRadiusBottomStart="30dp"
+        app:boxCornerRadiusTopStart="30dp"
+        app:boxCornerRadiusTopEnd="30dp"
+        app:boxCornerRadiusBottomEnd="30dp"
+        android:layout_marginTop="10dp"
+        style="@style/EditTextStyle"
+        android:hint="Password">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/logincarddiv"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:gravity="center"
+            android:layout_height="wrap_content">
     <Button
         android:id="@+id/login"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="Login"
+        android:layout_marginTop="20dp"
         android:background="#7E00FD"
         android:textColor="#fff"
         android:onClick="check_login_details"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toTopOf="@id/create_account"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="20dp"
         />
 
     <Button
@@ -102,10 +129,12 @@
         android:text="Sign Up"
         android:textColor="#AB3FFF"
         android:onClick="direct_to_register"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="160dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="569dp" />
+        android:layout_marginBottom="20dp" />
+
+        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

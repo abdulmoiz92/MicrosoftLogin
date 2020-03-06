@@ -15,4 +15,9 @@
 
     </style>
 
+    <style name="EditTextStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">#08275c</item>
+        <item name="boxStrokeWidth">3dp</item>
+    </style>
+
 </resources>

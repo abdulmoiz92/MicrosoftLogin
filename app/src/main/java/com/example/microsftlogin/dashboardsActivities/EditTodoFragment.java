@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
@@ -33,22 +32,21 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddTodoFragment extends Fragment {
-
-
+public class EditTodoFragment extends Fragment {
     EditText editTodo;
-    Button addTask;
+    Button editTask;
     Button editDate;
+    Button newActivity;
     TextView date;
-    List<Todo> todos = new ArrayList<>();
-    List<Todo> todosFromPref = new ArrayList<>();
+   // List<Todo> todos = new ArrayList<>();
+   // List<Todo> todosFromPref = new ArrayList<>();
     SharedPrefrenceHelper sph = new SharedPrefrenceHelper();
-    private TodoViewModel todoViewModel;
+    TodoViewModel todoViewModel;
 
-   // private TodoAdapter todoAdapter;
+    private TodoAdapter todoAdapter;
 
 
-    public AddTodoFragment() {
+    public EditTodoFragment() {
         // Required empty public constructor
     }
 
@@ -57,7 +55,7 @@ public class AddTodoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_todo, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_todo, container, false);
         todoViewModel = ViewModelProviders.of(getActivity()).get(TodoViewModel.class);
         final TodoRecyclerAdapter adapter = new TodoRecyclerAdapter(getActivity(),todoViewModel);
 
@@ -65,18 +63,22 @@ public class AddTodoFragment extends Fragment {
             @Override
             public void onChanged(List<Todo> todos) {
                 // Update the cached copy of the words in the adapter.
+
                 adapter.setTodos(todos);
             }
         });
 
-        sph.tprefrences = getActivity().getSharedPreferences(sph.getTodoSharedfile(), Context.MODE_PRIVATE);
+       /* sph.tprefrences = getActivity().getSharedPreferences(sph.getTodoSharedfile(), Context.MODE_PRIVATE);
         if(null != sph.getSpArray(SharedPrefrenceHelper.getTodo_Key(), todos))
-            todosFromPref = sph.getSpArray(SharedPrefrenceHelper.getTodo_Key(), todos);
+            todosFromPref = sph.getSpArray(SharedPrefrenceHelper.getTodo_Key(), todos); */
 
-        editTodo = view.findViewById(R.id.addtodo_task);
-        editDate = view.findViewById(R.id.addtodo_datebtn);
+        editTodo = view.findViewById(R.id.edittodo_task);
+        editTodo.setText(getArguments().getString("Todo"));
+        editDate = view.findViewById(R.id.edittodo_datebtn);
         date = view.findViewById(R.id.addtodo_date);
-        addTask = view.findViewById(R.id.addtodo_btn);
+        date.setText(getArguments().getString("Date"));
+        editTask = view.findViewById(R.id.edittodoeditfragmet_btn);
+        newActivity = view.findViewById(R.id.newActivty_btn);
 
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,27 +87,36 @@ public class AddTodoFragment extends Fragment {
                 DateFragment.show(getFragmentManager(),"DatePicker");
             }
         });
-        
-        addTask.setOnClickListener(new View.OnClickListener() {
+
+
+        editTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final int position = getArguments().getInt("position");
                 if (editTodo.length() > 0 && date.length() > 0) {
-                    Todo newTodo = new Todo(editTodo.getText().toString(), date.getText().toString());
-                    todoViewModel.insert(newTodo);
-                    /*
-                    todosFromPref.add(new Todo(editTodo.getText().toString(), date.getText().toString()));
+                    Todo todoToUpdate = adapter.getTodoAtPosition(position);
+                    Todo updatedTodo = new Todo(todoToUpdate.getId(),editTodo.getText().toString(),date.getText().toString());
+                    todoViewModel.update(updatedTodo);
+                   /* todosFromPref.set(getArguments().getInt("position"),new Todo(editTodo.getText().toString(),date.getText().toString()));
                     sph.editSpArray(SharedPrefrenceHelper.getTodo_Key(), todosFromPref);
                     todoAdapter.notifyDataSetChanged(); */
-                    Toast.makeText(getActivity(), "Task Has Been Added", Toast.LENGTH_LONG).show();
-                    Navigation.findNavController(v).navigate(AddTodoFragmentDirections.actionAddTodoFragmentToTodolistFragment());
+                    Toast.makeText(getActivity(), "Task Has Been Updated", Toast.LENGTH_LONG).show();
+                    Navigation.findNavController(v).navigate(EditTodoFragmentDirections.actionEditTodoFragmentToTodolistFragment());
                 } else {
                     Toast.makeText(getActivity(),"All Fields Need To Be Filled",Toast.LENGTH_LONG).show();
                 }
             }
         });
 
+        newActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.newActivity);
+            }
+        });
 
-      /*  if(null != todosFromPref && todosFromPref.size() > 0){
+
+       /* if(null != todosFromPref && todosFromPref.size() > 0){
             todoAdapter = new TodoAdapter(getActivity(), todosFromPref);
 
         } else {
@@ -113,7 +124,6 @@ public class AddTodoFragment extends Fragment {
         } */
 
         return view;
-
     }
 
 }

@@ -9,6 +9,12 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.NavHost;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -35,6 +41,12 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
     SharedPrefrenceHelper sph = new SharedPrefrenceHelper();
 
+    NavController navController;
+    AppBarConfiguration appBarConfiguration;
+    Toolbar toolbar;
+    NavigationView navigationView;
+    DrawerLayout drawer;
+    View hView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +54,19 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_home_page);
         sph.mprefrences = getSharedPreferences(sph.getSharedfile(),MODE_PRIVATE);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Dashboard dashboard = new Dashboard();
-        fragmentTransaction.replace(R.id.main_content, dashboard);
-        fragmentTransaction.commit();
-       //account_name.setText(sph.getSpString(sph.getPerson_name()));
+
 
         //Set Drawer Info From SPH
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        navController = Navigation.findNavController(this, R.id.fragment);
+        appBarConfiguration =
+                new AppBarConfiguration.Builder(navController.getGraph())
+                        .setDrawerLayout(drawer)
+                        .build();
+        toolbar = findViewById(R.id.toolbar);
+        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
+        hView =  navigationView.getHeaderView(0);
 
         //drawer_account_email.setText(sph.getSpString(sph.getEmail_Key()));
 
@@ -69,54 +86,26 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        fragmentTransaction.addToBackStack(null);
-
-        if (drawer != null) {
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                super.onBackPressed();
-            }
-        }
-
-    }
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        View hView =  navigationView.getHeaderView(0);
         TextView drawer_account_name = hView.findViewById(R.id.drawer_account_name);
         drawer_account_name.setText(SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_NAME));
         TextView drawer_account_email = hView.findViewById(R.id.drawer_account_email);
         drawer_account_email.setText(SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_EMAIL));
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_dashboard:
                 // Handle the camera import action (for now display a toast).
-                Dashboard navDashboard = new Dashboard();
-                fragmentTransaction.replace(R.id.main_content, navDashboard);
-                fragmentTransaction.commit();
-                getSupportActionBar().setTitle("Dashboard");
+                navController.navigate(R.id.navfragmentdashboard);
+               // getSupportActionBar().setTitle("Dashboard");
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             case R.id.nav_todolist:
                 // Handle the gallery action (for now display a toast).
-                TodolistFragment todofragment = new TodolistFragment();
-                fragmentTransaction.addToBackStack(null).replace(R.id.main_content, todofragment);
-                fragmentTransaction.commit();
-                getSupportActionBar().setTitle("TodoList");
+                navController.navigate(R.id.todolistFragment);
+               // getSupportActionBar().setTitle("TodoList");
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             case R.id.nav_reports:
@@ -126,18 +115,13 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 return true;
             case R.id.nav_calendar:
                 // Handle the tools action (for now display a toast).
-                CalendarFragment calendarfragment = new CalendarFragment();
-                fragmentTransaction.addToBackStack(null).replace(R.id.main_content, calendarfragment);
-                fragmentTransaction.commit();
-                getSupportActionBar().setTitle("Calendar");
+                navController.navigate(R.id.calendarFragment);
+               // getSupportActionBar().setTitle("Calendar");
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             case R.id.nav_user:
                 // Handle the share action (for now display a toast).
-                EditProfile profilefragment = new EditProfile();
-                fragmentTransaction.addToBackStack(null).replace(R.id.main_content, profilefragment);
-                fragmentTransaction.commit();
-                getSupportActionBar().setTitle("User Info");
+                navController.navigate(R.id.editProfileFragment);
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             case R.id.nav_setting:
@@ -155,21 +139,13 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         }
     }
 
-    @Override
+    /*@Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return super.onSupportNavigateUp();
-    }
+        return navController.navigateUp();
+    }*/
 
     public void displayToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    public void logout_user(View view) {
-        sph.setIslogin(false);
-        sph.editSpBoolean(SharedPrefrenceHelper.getLogin_key(),sph.getisLogin());
-        Intent logoutintent = new Intent(HomePage.this,MainActivity.class);
-        startActivity(logoutintent);
     }
 
 
@@ -192,21 +168,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     public void AddDrawer() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if (drawer != null) {
-            drawer.addDrawerListener(toggle);
-        }
-        toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        View hView =  navigationView.getHeaderView(0);
         TextView drawer_account_name = hView.findViewById(R.id.drawer_account_name);
         drawer_account_name.setText(SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_NAME));
         TextView drawer_account_email = hView.findViewById(R.id.drawer_account_email);

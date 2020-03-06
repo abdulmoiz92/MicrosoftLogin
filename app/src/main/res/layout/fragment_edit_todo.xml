@@ -9,7 +9,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:id="@+id/addtodo_heading"
+        android:id="@+id/edittodo_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,16 +18,16 @@
         android:layout_marginTop="40dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:lineHeight="70dp"
-        android:text="Add New \nTask"
+        android:text="Edit \nTask"
         android:textSize="40dp"
         />
 
     <EditText
-        android:id="@+id/addtodo_task"
+        android:id="@+id/edittodo_task"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="Enter Your Task Here"
-        app:layout_constraintTop_toBottomOf="@id/addtodo_heading"
+        app:layout_constraintTop_toBottomOf="@id/edittodo_heading"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="50dp"
@@ -40,15 +40,15 @@
         android:layout_height="wrap_content"
         android:text=""
         android:layout_marginTop="20dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/addtodo_datebtn"
-        app:layout_constraintTop_toBottomOf="@+id/addtodo_task" />
+        app:layout_constraintBottom_toTopOf="@+id/edittodo_datebtn"
+        app:layout_constraintTop_toBottomOf="@+id/edittodo_task" />
 
 
     <Button
-        android:id="@+id/addtodo_datebtn"
+        android:id="@+id/edittodo_datebtn"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:background="@drawable/loginbuttonbg"
@@ -61,7 +61,18 @@
         />
 
     <Button
-        android:id="@+id/addtodo_btn"
+        android:id="@+id/edittodoeditfragmet_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/newActivty_btn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="30dp"
+        android:background="#7E00FD"
+        android:textColor="#fff"
+        android:text="Edit Todo"/>
+
+    <Button
+        android:id="@+id/newActivty_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,6 +80,6 @@
         android:layout_marginBottom="30dp"
         android:background="#7E00FD"
         android:textColor="#fff"
-        android:text="Add Todo"/>
+        android:text="New Activiy"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

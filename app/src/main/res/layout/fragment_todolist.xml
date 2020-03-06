@@ -7,14 +7,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".dashboardsActivities.TodolistFragment">
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/TaskList"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="40dp"/>
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="16dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

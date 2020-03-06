@@ -1,7 +1,6 @@
 package com.example.microsftlogin.Helpers;
 
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,18 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.microsftlogin.Adapter.Todo;
-import com.example.microsftlogin.HomePage;
-import com.example.microsftlogin.MainActivity;
 import com.example.microsftlogin.R;
-import com.example.microsftlogin.dashboardsActivities.TodolistFragment;
 
 import java.util.Calendar;
 import java.util.Date;

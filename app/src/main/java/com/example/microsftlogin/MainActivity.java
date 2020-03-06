@@ -2,6 +2,9 @@ package com.example.microsftlogin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.microsftlogin.Helpers.SharedPrefrenceHelper;
+import com.example.microsftlogin.UserDatabase.User;
+import com.example.microsftlogin.UserDatabase.UserViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.List;
 
 import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.IS_FIRST_TIME_LAUNCH;
 import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.IS_LOGIN;
@@ -24,17 +32,25 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPrefrenceHelper sph = new SharedPrefrenceHelper();
     //private static final int TEXT_REQUEST = 1;
-    private TextView login_email;
-    private EditText login_password;
+    private TextInputLayout login_email;
+    private TextInputLayout login_password;
     private String email_pref;
     private String password_pref;
     private TextView login_error_message;
+    private UserViewModel userViewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        userViewModel.getuAllUsers().observe(this, new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+            }
+        });
 
         if (!SharedPrefrenceUtil.getInstance(getApplicationContext()).getBooleanValue(IS_FIRST_TIME_LAUNCH)) {
             Intent splashScreen = new Intent(this, SplashScreen.class);
@@ -56,14 +72,13 @@ public class MainActivity extends AppCompatActivity {
             Bundle bundle = getIntent().getExtras();
             if (null != bundle) {
 
-                Toast.makeText(this, "Registered Successfully", Toast.LENGTH_LONG).show();
-                login_email.setText(SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_EMAIL));
-                login_password.setText(SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_PASSWORD));
+                login_email.getEditText().setText(bundle.getString("email"));
+                login_password.getEditText().setText(bundle.getString("password"));
 
             }
 
-            email_pref = SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_EMAIL);
-            password_pref = SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_PASSWORD);
+           /* email_pref = SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_EMAIL);
+            password_pref = SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_PASSWORD); */
         }
     }
 
@@ -97,16 +112,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void check_login_details(View view) {
-        String email = login_email.getText().toString();
-        String password = login_password.getText().toString();
-        if (!email.equals("") && email.equals(email_pref) && !password.equals("") && password.equals(password_pref)) {
+        String email = login_email.getEditText().getText().toString();
+        String password = login_password.getEditText().getText().toString();
+        boolean verifyEmail;
+        boolean verifyPassword;
+       // if (userViewModel.getuAllUsers() != null) {
+            LiveData<List<User>> checkUser = userViewModel.getuAllUsers();
+        /*    verifyEmail = email.equals(checkUser.getEmail());
+            verifyPassword = password.equals(checkUser.getPassword());*/
+       /* } else {
+            verifyEmail = false;
+            verifyPassword = false;
+        }*/
+      /*  if (!email.equals("") && verifyEmail && verifyPassword && !password.equals("")) {
             Intent loginintent = new Intent(MainActivity.this, HomePage.class);
-            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(IS_LOGIN,true);
+            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(IS_LOGIN, true);
             loginintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(loginintent);
         } else {
             login_error_message.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     @Override

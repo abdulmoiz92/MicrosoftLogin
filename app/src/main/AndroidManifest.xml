@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.microsftlogin">
 
-    <uses-feature android:name="android.hardware.camera"
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
-
-
 
     <application
         android:allowBackup="true"
@@ -16,9 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
-
-        <activity android:name=".LandingPage"></activity>
-        <activity android:name=".IntroScreens.WelcomeActivity"></activity>
+        <activity android:name=".NewActivity"></activity>
+        <activity android:name=".LandingPage" />
+        <activity android:name=".IntroScreens.WelcomeActivity" />
         <activity
             android:name=".dashboardsActivities.EditProfile"
             android:noHistory="true" />
