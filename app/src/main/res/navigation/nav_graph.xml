@@ -22,6 +22,34 @@
             android:id="@+id/action_dashboard3_to_calendarFragment"
             app:destination="@id/calendarFragment"
             app:enterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_navfragmentdashboard_to_aboutUserFragment"
+            app:destination="@id/aboutUserFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navfragmentdashboard_to_userExperiences"
+            app:destination="@id/userExperiences"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navfragmentdashboard_to_addUserExperience"
+            app:destination="@id/addUserExperience" />
+        <action
+            android:id="@+id/action_navfragmentdashboard_to_userEducation"
+            app:destination="@id/userEducation"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navfragmentdashboard_to_userSkills"
+            app:destination="@id/userSkills"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navfragmentdashboard_to_userPersonalProjects"
+            app:destination="@id/userPersonalProjects" />
+        <action
+            android:id="@+id/action_navfragmentdashboard_to_userAchievements"
+            app:destination="@id/userAchievements" />
     </fragment>
     <fragment
         android:id="@+id/todolistFragment"
@@ -72,4 +100,52 @@
         android:name="com.example.microsftlogin.NewActivity"
         android:label="activity_new"
         tools:layout="@layout/activity_new" />
+    <fragment
+        android:id="@+id/aboutUserFragment"
+        android:name="com.example.microsftlogin.EditCvFragements.AboutUserFragment"
+        android:label="AboutYou"
+        tools:layout="@layout/fragment_about_user" />
+    <fragment
+        android:id="@+id/userExperiences"
+        android:name="com.example.microsftlogin.EditCvFragements.UserExperiences"
+        android:label="Experiences" />
+    <fragment
+        android:id="@+id/addUserExperience"
+        android:name="com.example.microsftlogin.EditCvFragements.AddUserExperience"
+        android:label="AddExperience" />
+    <fragment
+        android:id="@+id/userEducation"
+        android:name="com.example.microsftlogin.EditCvFragements.UserEducation"
+        android:label="Education">
+        <action
+            android:id="@+id/action_userEducation_to_addUserEducation"
+            app:destination="@id/addUserEducation"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/addUserEducation"
+        android:name="com.example.microsftlogin.EditCvFragements.AddUserEducation"
+        android:label="AddEducation" />
+    <fragment
+        android:id="@+id/userSkills"
+        android:name="com.example.microsftlogin.EditCvFragements.UserSkills"
+        android:label="Skills" />
+    <fragment
+        android:id="@+id/userPersonalProjects"
+        android:name="com.example.microsftlogin.EditCvFragements.UserPersonalProjects"
+        android:label="PersonalProjects" >
+        <action
+            android:id="@+id/action_userPersonalProjects_to_addUserPersonalProjects"
+            app:destination="@id/addUserPersonalProjects"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/addUserPersonalProjects"
+        android:name="com.example.microsftlogin.EditCvFragements.AddUserPersonalProjects"
+        android:label="AddProjects" />
+    <fragment
+        android:id="@+id/userAchievements"
+        android:name="com.example.microsftlogin.EditCvFragements.UserAchievements"
+        android:label="Achievements" />
 </navigation>

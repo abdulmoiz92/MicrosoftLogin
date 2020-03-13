@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
         <activity android:name=".NewActivity"></activity>
-        <activity android:name=".LandingPage" />
+        <activity android:name=".StartUpActivities.LandingPage" />
         <activity android:name=".IntroScreens.WelcomeActivity" />
         <activity
             android:name=".dashboardsActivities.EditProfile"
@@ -33,18 +33,19 @@
             android:name=".HomePage"
             android:noHistory="true" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".StartUpActivities.SplashScreen"
             android:noHistory="true" />
         <activity
-            android:name=".Register"
+            android:name=".StartUpActivities.Register"
             android:label="Register"
-            android:parentActivityName=".MainActivity">
-            <meta-data
+            android:noHistory="true">
+           <!-- android:parentActivityName=".StartUpActivities.MainActivity" -->
+          <!--  <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.microsftlogin.MainActivity" />
+                android:value="com.example.microsftlogin.StartUpActivities.MainActivity" /> -->
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".StartUpActivities.MainActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -11,6 +11,7 @@ public class SharedPrefrenceUtil {
     public static final String USER_NAME = "user_name";
     public static final String USER_EMAIL = "user_email";
     public static final String USER_PASSWORD = "user_password";
+    public static final String CURRENT_USER_ID = "current_user_id";
     public static final String COMPANY = "company";
     public static final String BALANCE = "balance";
     public static final String FIREBASE_TOKEN = "firebase_token";

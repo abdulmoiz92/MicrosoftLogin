@@ -50,12 +50,14 @@ public class DatepickerFragment extends DialogFragment implements DatePickerDial
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
        TextView date = getActivity().findViewById(R.id.addtodo_date);
+       TextView workFromDate= getActivity().findViewById(R.id.adduserexperience_workedfromdate);
+       TextView workTillDate = getActivity().findViewById(R.id.adduserexperience_workedtilldate);
         String month_string = Integer.toString(month+1);
         String day_string = Integer.toString(dayOfMonth);
         String year_string = Integer.toString(year);
         String dateMessage = (month_string +
                 "/" + day_string + "/" + year_string);
         date.setVisibility(View.VISIBLE);
-        date.setText(dateMessage);
+            date.setText(dateMessage);
     }
 }

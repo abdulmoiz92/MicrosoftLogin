@@ -12,10 +12,17 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
-@Database(entities = {User.class}, version = 1, exportSchema = false)
+import com.example.microsftlogin.AboutUserDatabase.AboutUser;
+import com.example.microsftlogin.AboutUserDatabase.AboutUserDao;
+import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
+import com.example.microsftlogin.UserExperienceDatabase.UserExperienceDao;
+
+@Database(entities = {User.class,AboutUser.class,UserExperience.class}, version = 5, exportSchema = false)
 public abstract class UserRoomDatabase extends RoomDatabase {
 
     public abstract UserDao userDao();
+    public abstract AboutUserDao aboutUserDao();
+    public abstract UserExperienceDao userExperienceDao();
 
     public static UserRoomDatabase INSTANCE;
 
@@ -27,6 +34,8 @@ public abstract class UserRoomDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             UserRoomDatabase.class,"user_database")
 
+                            .allowMainThreadQueries()
+                            .fallbackToDestructiveMigration()
                             .addCallback(uRoomDatabaseCallback)
                             .build();
                 }
@@ -34,6 +43,8 @@ public abstract class UserRoomDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+
 
     private static UserRoomDatabase.Callback uRoomDatabaseCallback =
        new RoomDatabase.Callback() {
@@ -49,13 +60,21 @@ public abstract class UserRoomDatabase extends RoomDatabase {
      */
     private static class PopulateDbAsync extends AsyncTask<Void,Void,Void> {
         private final UserDao dao;
+        private final AboutUserDao aboutUserDao;
+        private final UserExperienceDao userExperienceDao;
 
-        PopulateDbAsync(UserRoomDatabase db) { this.dao = db.userDao(); }
+        PopulateDbAsync(UserRoomDatabase db) {
+            this.dao = db.userDao();
+            this.aboutUserDao = db.aboutUserDao();
+            this.userExperienceDao = db.userExperienceDao();
+        }
 
         @Override
         protected Void doInBackground(Void... voids) {
             // when it is first created
             dao.getAllUser();
+            aboutUserDao.getAllAboutUser();
+            userExperienceDao.getAllUserExperience();
 
 
             return null;

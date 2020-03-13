@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/userexperience_list_div"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:background="#7E00FD"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/userexperience_jobTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Job Title"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/userexperience_companyName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comapny Name"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintTop_toBottomOf="@id/userexperience_jobTitle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="25sp"/>
+
+        <LinearLayout
+            android:id="@+id/userexperience_datesofexperience"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/userexperience_companyName"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/userexperience_list_worked_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="03/12/2020"
+                android:textColor="#fff"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" - "
+                android:textColor="#fff"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/userexperience_list_worked_till"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="03/12/2020"
+                android:textColor="#fff"
+                android:textStyle="italic"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/userexperience_companyAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Karachi"
+            android:textColor="#fff"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/userexperience_companyName"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/userexperience_tasksPerformed"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/userexperience_datesofexperience"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="8dp"
+            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+            android:textColor="#fff"
+            android:lineHeight="20dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/userexperience_tasksPerformed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <ImageView
+                android:id="@+id/deletetodo_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete_white_24dp"
+                />
+
+            <ImageView
+                android:id="@+id/viewtodo_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_remove_red_eye_white_24dp"
+                />
+
+            <ImageView
+                android:id="@+id/edittodo_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit_white_24dp"
+                />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

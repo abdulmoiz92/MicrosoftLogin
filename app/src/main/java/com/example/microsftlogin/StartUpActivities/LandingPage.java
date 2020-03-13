@@ -1,4 +1,4 @@
-package com.example.microsftlogin;
+package com.example.microsftlogin.StartUpActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.microsftlogin.R;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
 
 import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.IS_FIRST_TIME_LAUNCH;

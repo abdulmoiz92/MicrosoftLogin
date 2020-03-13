@@ -1,32 +1,31 @@
-package com.example.microsftlogin;
+package com.example.microsftlogin.StartUpActivities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.microsftlogin.Helpers.SharedPrefrenceHelper;
+import com.example.microsftlogin.HomePage;
+import com.example.microsftlogin.R;
 import com.example.microsftlogin.UserDatabase.User;
 import com.example.microsftlogin.UserDatabase.UserViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.CURRENT_USER_ID;
 import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.IS_FIRST_TIME_LAUNCH;
 import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.IS_LOGIN;
-import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_EMAIL;
-import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_PASSWORD;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private String password_pref;
     private TextView login_error_message;
     private UserViewModel userViewModel;
+    private List<User> allUsers = new ArrayList<>();
 
 
     @Override
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         userViewModel.getuAllUsers().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
+                allUsers = users;
             }
         });
 
@@ -114,24 +115,35 @@ public class MainActivity extends AppCompatActivity {
     public void check_login_details(View view) {
         String email = login_email.getEditText().getText().toString();
         String password = login_password.getEditText().getText().toString();
-        boolean verifyEmail;
-        boolean verifyPassword;
-       // if (userViewModel.getuAllUsers() != null) {
-            LiveData<List<User>> checkUser = userViewModel.getuAllUsers();
-        /*    verifyEmail = email.equals(checkUser.getEmail());
-            verifyPassword = password.equals(checkUser.getPassword());*/
-       /* } else {
-            verifyEmail = false;
-            verifyPassword = false;
-        }*/
-      /*  if (!email.equals("") && verifyEmail && verifyPassword && !password.equals("")) {
+        boolean verifyEmail = false;
+        boolean verifyPassword = false;
+      /*  if (allUsers.size() > 0) {
+           for (int i= 0; i <= allUsers.size() - 1; i++) {
+               if (allUsers.get(i).getEmail().equals(email) && allUsers.get(i).getPassword().equals(password)) {
+                   verifyEmail = true;
+                   verifyPassword = true;
+                   SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(CURRENT_USER_ID,
+                           allUsers.get(i).getId());
+                   break;
+               }
+           }
+        } */
+        List<User> usersFound = new ArrayList<>();
+        usersFound = userViewModel.findUser(email);
+        if (usersFound.size() > 0) {
+            verifyEmail = usersFound.get(0).getEmail().equals(email);
+            verifyPassword = usersFound.get(0).getPassword().equals(password);
+        }
+        if (!email.equals("") && verifyEmail && verifyPassword && !password.equals("")) {
             Intent loginintent = new Intent(MainActivity.this, HomePage.class);
             SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(IS_LOGIN, true);
+            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(CURRENT_USER_ID,
+                    usersFound.get(0).getId());
             loginintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(loginintent);
         } else {
             login_error_message.setVisibility(View.VISIBLE);
-        }*/
+        }
     }
 
     @Override

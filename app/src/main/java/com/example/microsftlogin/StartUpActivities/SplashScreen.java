@@ -1,9 +1,8 @@
-package com.example.microsftlogin;
+package com.example.microsftlogin.StartUpActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.Animation;
@@ -13,9 +12,7 @@ import android.widget.TextView;
 
 import com.example.microsftlogin.Helpers.SharedPrefrenceHelper;
 import com.example.microsftlogin.IntroScreens.WelcomeActivity;
-import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
-
-import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.IS_FIRST_TIME_LAUNCH;
+import com.example.microsftlogin.R;
 
 public class SplashScreen extends AppCompatActivity {
 

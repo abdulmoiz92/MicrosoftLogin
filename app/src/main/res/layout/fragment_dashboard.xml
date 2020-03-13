@@ -95,6 +95,7 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/aboutuser"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -119,7 +120,7 @@
                 android:text="About"
                 android:layout_marginTop="10dp"
                 android:textAlignment="center"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 />
 
             </LinearLayout>
@@ -127,6 +128,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/userexperience"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -151,7 +153,7 @@
                     android:text="Expirience"
                     android:layout_marginTop="10dp"
                     android:textAlignment="center"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     />
 
             </LinearLayout>
@@ -159,6 +161,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/usereducation"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -184,7 +187,7 @@
                     android:text="Education"
                     android:layout_marginTop="10dp"
                     android:textAlignment="center"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     />
 
             </LinearLayout>
@@ -192,6 +195,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/userskills"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -217,7 +221,7 @@
                     android:text="Skills"
                     android:layout_marginTop="10dp"
                     android:textAlignment="center"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     />
 
             </LinearLayout>
@@ -225,6 +229,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/userprojects"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -250,7 +255,7 @@
                     android:text="Projects"
                     android:layout_marginTop="10dp"
                     android:textAlignment="center"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     />
 
             </LinearLayout>
@@ -259,6 +264,7 @@
 
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/userachievements"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -281,10 +287,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Achivements"
+                    android:text="Achievements"
                     android:layout_marginTop="10dp"
                     android:textAlignment="center"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     />
 
             </LinearLayout>

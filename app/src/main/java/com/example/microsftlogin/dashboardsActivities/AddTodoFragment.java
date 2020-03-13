@@ -69,9 +69,9 @@ public class AddTodoFragment extends Fragment {
             }
         });
 
-        sph.tprefrences = getActivity().getSharedPreferences(sph.getTodoSharedfile(), Context.MODE_PRIVATE);
+  /*      sph.tprefrences = getActivity().getSharedPreferences(sph.getTodoSharedfile(), Context.MODE_PRIVATE);
         if(null != sph.getSpArray(SharedPrefrenceHelper.getTodo_Key(), todos))
-            todosFromPref = sph.getSpArray(SharedPrefrenceHelper.getTodo_Key(), todos);
+            todosFromPref = sph.getSpArray(SharedPrefrenceHelper.getTodo_Key(), todos); */
 
         editTodo = view.findViewById(R.id.addtodo_task);
         editDate = view.findViewById(R.id.addtodo_datebtn);

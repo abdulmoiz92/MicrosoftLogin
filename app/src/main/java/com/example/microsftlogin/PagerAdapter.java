@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.microsftlogin.TabsFragment.Dashboard;
-import com.example.microsftlogin.TabsFragment.User;
+import com.example.microsftlogin.TabsFragment.UserTab;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
@@ -21,7 +21,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: return new Dashboard();
-            case 1: return new User();
+            case 1: return new UserTab();
             default: return null;
         }
     }

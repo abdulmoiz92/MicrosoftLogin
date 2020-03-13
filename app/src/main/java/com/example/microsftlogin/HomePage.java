@@ -1,24 +1,15 @@
 package com.example.microsftlogin;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,12 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.microsftlogin.Helpers.SharedPrefrenceHelper;
-import com.example.microsftlogin.TabsFragment.Dashboard;
-import com.example.microsftlogin.TabsFragment.TablayoutFragment;
+import com.example.microsftlogin.StartUpActivities.MainActivity;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
-import com.example.microsftlogin.dashboardsActivities.CalendarFragment;
-import com.example.microsftlogin.dashboardsActivities.EditProfile;
-import com.example.microsftlogin.dashboardsActivities.TodolistFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_EMAIL;
@@ -151,7 +138,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
     public void logout_user_nav() {
         SharedPrefrenceUtil.getInstance(getApplicationContext()).clearKey(SharedPrefrenceUtil.IS_LOGIN);
-        Intent logoutintent = new Intent(HomePage.this,MainActivity.class);
+        Intent logoutintent = new Intent(HomePage.this, MainActivity.class);
         startActivity(logoutintent);
     }
 

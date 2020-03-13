@@ -21,14 +21,14 @@ import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_NAME;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class User extends Fragment {
+public class UserTab extends Fragment {
 
     TextView emailAddress;
     TextView personName;
     SharedPrefrenceHelper sph = new SharedPrefrenceHelper();
 
 
-    public User() {
+    public UserTab() {
         // Required empty public constructor
 
     }
