@@ -91,7 +91,7 @@ public class AboutUserFragment extends Fragment {
                     } else {
                         Toast.makeText(getActivity(),"Name & Email Need To Be Filled",Toast.LENGTH_LONG).show();
                     }
-                } else if (usersAboutInfoWithId.size() > 0 && mAllAboutUsers.size() > 0 && hasAboutUser && foundAboutUsersList.size() > 0) {
+                } else if (usersAboutInfoWithId.size() > 0 && hasAboutUser && foundAboutUsersList.size() > 0) {
                     if (!name.equals("") && !email.equals("")) {
                         AboutUser aboutUserToUpdate = usersAboutInfoWithId.get(0).getAboutUser();
                         AboutUser newAboutUserInfo = new AboutUser(aboutUserToUpdate.getId(),name, email, phone, address, education, description, user_id);
@@ -112,12 +112,12 @@ public class AboutUserFragment extends Fragment {
         super.onResume();
 
        aboutUserViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(AboutUserViewModel.class);
-       aboutUserViewModel.getAllAboutUsers().observe(getActivity(), new Observer<List<AboutUser>>() {
+      /* aboutUserViewModel.getAllAboutUsers().observe(getActivity(), new Observer<List<AboutUser>>() {
            @Override
            public void onChanged(List<AboutUser> aboutUsers) {
                mAllAboutUsers = aboutUsers;
            }
-       });
+       }); */
 
        userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
        userViewModel.getAllUsersWithAbout().observe(getActivity(), new Observer<List<UserWithAbout>>() {
@@ -130,7 +130,7 @@ public class AboutUserFragment extends Fragment {
        int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
 
 
-       if (mAllAboutUsers.size() > 0) {
+       if (userViewModel.findUserWithAbout(user_id).get(0).getAboutUserList().size() > 0) {
            List<UserWithAbout> usersAboutWithId;
            usersAboutWithId = userViewModel.findUserWithAbout(user_id);
            List<AboutUser> foundAboutUserList = usersAboutWithId.get(0).getAboutUserList();

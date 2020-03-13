@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.microsftlogin.Adapter.UserInfoAdapter;
 import com.example.microsftlogin.Helpers.DatepickerFragment;
 import com.example.microsftlogin.Helpers.WorkPickerFragment;
 import com.example.microsftlogin.R;
+import com.example.microsftlogin.UserDatabase.UserViewModel;
 import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
 import com.example.microsftlogin.UserExperienceDatabase.UserExperienceViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
@@ -28,6 +31,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class AddUserExperience extends Fragment {
+    int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
     private TextInputLayout adduserexperienceJobTitle;
     private TextInputLayout adduserexperienceCompanyName;
     private TextView adduserexperienceWorkedFromdate;
@@ -38,7 +42,9 @@ public class AddUserExperience extends Fragment {
     private Button adduserexperienceWorkedTill;
     private Button adduserexperienceSubmit;
     private UserExperienceViewModel userExperienceViewModel;
+    private UserViewModel userViewModel;
     private List<UserExperience> allUserExpiriences = new ArrayList<>();
+
 
     public AddUserExperience() {
         // Required empty public constructor
@@ -59,20 +65,58 @@ public class AddUserExperience extends Fragment {
         adduserexperienceWorkedFrom = view.findViewById(R.id.adduserexperience_workedfrom);
         adduserexperienceWorkedTill = view.findViewById(R.id.adduserexperience_workedtill);
         adduserexperienceSubmit = view.findViewById(R.id.adduserexperience_submit);
+        final UserInfoAdapter adapter = new UserInfoAdapter(getActivity(), allUserExpiriences,userExperienceViewModel);
 
-        adduserexperienceJobTitle.getEditText().setText("Testing");
+
+        int userexperienceIdReceived;
 
         userExperienceViewModel = ViewModelProviders.of(getActivity()).get(UserExperienceViewModel.class);
-        userExperienceViewModel.getAllUsersExperience().observe(getActivity(), new Observer<List<UserExperience>>() {
+        userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
+        allUserExpiriences = userViewModel.findUserWithExperiences(user_id).get(0).getUserExperiences();
+
+        adduserexperienceWorkedFrom.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(List<UserExperience> userExperiences) {
-                allUserExpiriences = userExperiences;
+            public void onClick(View v) {
+                WorkPickerFragment datePicker = new WorkPickerFragment(adduserexperienceWorkedFromdate, null);
+                datePicker.show(getFragmentManager(), "datePickerFrom");
             }
         });
+
+        adduserexperienceWorkedTill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String minDateText = adduserexperienceWorkedFromdate.getText().toString();
+                WorkPickerFragment datePicker = new WorkPickerFragment(adduserexperienceWorkedTilldate, minDateText);
+                datePicker.show(getFragmentManager(), "datePickerTill");
+            }
+        });
+
+
+        if (getArguments() != null) {
+            int actionToPerform = getArguments().getInt("ActionToPerform");
+            userexperienceIdReceived = getArguments().getInt("UserExperienceId");
+            String jobTitleReceived = getArguments().getString("JobTitle");
+            String companyNameReceived = getArguments().getString("CompanyName");
+            String workedFromReceived = getArguments().getString("WorkedFrom");
+            String workedTillReceived = getArguments().getString("WorkedTill");
+            String companyAddressReceived = getArguments().getString("CompanyAddress");
+            String tasksPerformedReceived = getArguments().getString("TasksPerformed");
+            adduserexperienceJobTitle.getEditText().setText(jobTitleReceived);
+            adduserexperienceCompanyName.getEditText().setText(companyNameReceived);
+            adduserexperienceWorkedFromdate.setText(workedFromReceived);
+            adduserexperienceWorkedTilldate.setText(workedTillReceived);
+            adduserexperienceCompanyAddress.getEditText().setText(companyAddressReceived);
+            adduserexperienceTasksPerformed.getEditText().setText(tasksPerformedReceived);
+        }
+
 
         adduserexperienceSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int actionToPerform = 0;
+                if (getArguments() != null) {
+                    actionToPerform = getArguments().getInt("ActionToPerform");
+                }
                 String jobTitle = adduserexperienceJobTitle.getEditText().getText().toString();
                 String companyName = adduserexperienceCompanyName.getEditText().getText().toString();
                 String workedFromDate = adduserexperienceWorkedFromdate.getText().toString();
@@ -80,11 +124,31 @@ public class AddUserExperience extends Fragment {
                 String companyAddress = adduserexperienceCompanyAddress.getEditText().getText().toString();
                 String tasksPerformed = adduserexperienceTasksPerformed.getEditText().getText().toString();
 
-                int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+                if (actionToPerform == 2) {
+                    if (!jobTitle.equals("") && !companyName.equals("") && !workedFromDate.equals("") && !workedTillDate.equals("")
+                            && !companyAddress.equals("") && !tasksPerformed.equals("")) {
+                        final int userexperienceIdReceived = getArguments().getInt("UserExperienceId");
+                        UserExperience userToBeUpdated = new UserExperience(userexperienceIdReceived, jobTitle, companyName,
+                                workedFromDate, workedTillDate, companyAddress, tasksPerformed, user_id);
+                        userExperienceViewModel.update(userToBeUpdated);
+                        Toast.makeText(getActivity(), "Experience Information Has Been Updated", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getActivity(), "All Fields Are Required", Toast.LENGTH_LONG).show();
+                    }
+                } else {
 
-                UserExperience newUserExperience = new UserExperience(jobTitle,companyName,workedFromDate,workedTillDate,
-                        companyAddress,tasksPerformed,user_id);
-                userExperienceViewModel.insert(newUserExperience);
+                    int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+
+                    if (!jobTitle.equals("") && !companyName.equals("") && !workedFromDate.equals("") && !workedTillDate.equals("")
+                            && !companyAddress.equals("") && !tasksPerformed.equals("")) {
+
+                        UserExperience newUserExperience = new UserExperience(jobTitle, companyName, workedFromDate, workedTillDate,
+                                companyAddress, tasksPerformed, user_id);
+                        userExperienceViewModel.insert(newUserExperience);
+                    } else {
+                        Toast.makeText(getActivity(), "All Fields Are Required", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 

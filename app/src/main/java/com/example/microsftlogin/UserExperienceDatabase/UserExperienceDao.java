@@ -2,6 +2,7 @@ package com.example.microsftlogin.UserExperienceDatabase;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -19,4 +20,7 @@ public interface UserExperienceDao {
 
     @Update
     void update(UserExperience userExperience);
+
+    @Delete
+    void delete(UserExperience userExperience);
 }

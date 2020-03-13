@@ -25,6 +25,8 @@ public class UserExperienceRepository {
 
     public void update(UserExperience userExperience) { new updateAsyncTask(userExperienceDao).execute(userExperience); }
 
+    public void delete(UserExperience userExperience) { new deleteAsyncTask(userExperienceDao).execute(userExperience); }
+
     private static class insertAsyncTask extends AsyncTask<UserExperience,Void,Void> {
         private UserExperienceDao mAsyncTaskDao;
 
@@ -46,6 +48,18 @@ public class UserExperienceRepository {
         @Override
         protected Void doInBackground(UserExperience... params) {
             mAsyncTaskDao.update(params[0]);
+            return null;
+        }
+    }
+
+    private static class deleteAsyncTask extends AsyncTask<UserExperience,Void,Void> {
+        private UserExperienceDao mAsyncTaskDao;
+
+        deleteAsyncTask(UserExperienceDao userExperienceDao) { this.mAsyncTaskDao = userExperienceDao; }
+
+        @Override
+        protected Void doInBackground(UserExperience... params) {
+            mAsyncTaskDao.delete(params[0]);
             return null;
         }
     }

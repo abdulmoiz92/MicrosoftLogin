@@ -14,15 +14,18 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import com.example.microsftlogin.AboutUserDatabase.AboutUser;
 import com.example.microsftlogin.AboutUserDatabase.AboutUserDao;
+import com.example.microsftlogin.UserEducationDatabase.UserEducation;
+import com.example.microsftlogin.UserEducationDatabase.UserEducationDao;
 import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
 import com.example.microsftlogin.UserExperienceDatabase.UserExperienceDao;
 
-@Database(entities = {User.class,AboutUser.class,UserExperience.class}, version = 5, exportSchema = false)
+@Database(entities = {User.class,AboutUser.class,UserExperience.class, UserEducation.class}, version = 7, exportSchema = false)
 public abstract class UserRoomDatabase extends RoomDatabase {
 
     public abstract UserDao userDao();
     public abstract AboutUserDao aboutUserDao();
     public abstract UserExperienceDao userExperienceDao();
+    public abstract UserEducationDao userEducationDao();
 
     public static UserRoomDatabase INSTANCE;
 
@@ -62,11 +65,13 @@ public abstract class UserRoomDatabase extends RoomDatabase {
         private final UserDao dao;
         private final AboutUserDao aboutUserDao;
         private final UserExperienceDao userExperienceDao;
+        private final UserEducationDao userEducationDao;
 
         PopulateDbAsync(UserRoomDatabase db) {
             this.dao = db.userDao();
             this.aboutUserDao = db.aboutUserDao();
             this.userExperienceDao = db.userExperienceDao();
+            this.userEducationDao = db.userEducationDao();
         }
 
         @Override
@@ -75,6 +80,7 @@ public abstract class UserRoomDatabase extends RoomDatabase {
             dao.getAllUser();
             aboutUserDao.getAllAboutUser();
             userExperienceDao.getAllUserExperience();
+            userEducationDao.getAllUserEducation();
 
 
             return null;

@@ -115,7 +115,7 @@
         android:label="AddExperience" />
     <fragment
         android:id="@+id/userEducation"
-        android:name="com.example.microsftlogin.EditCvFragements.UserEducation"
+        android:name="com.example.microsftlogin.EditCvFragements.UserEducations"
         android:label="Education">
         <action
             android:id="@+id/action_userEducation_to_addUserEducation"

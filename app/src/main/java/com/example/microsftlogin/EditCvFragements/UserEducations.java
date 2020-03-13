@@ -16,11 +16,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserEducation extends Fragment {
+public class UserEducations extends Fragment {
     private FloatingActionButton addUserEducation;
     private NavController navController;
 
-    public UserEducation() {
+    public UserEducations() {
         // Required empty public
     }
 

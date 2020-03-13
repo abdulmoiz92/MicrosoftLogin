@@ -20,6 +20,7 @@ import com.example.microsftlogin.R;
 import com.example.microsftlogin.UserDatabase.UserViewModel;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithExperience;
 import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
+import com.example.microsftlogin.UserExperienceDatabase.UserExperienceViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -38,6 +39,7 @@ public class UserExperiences extends Fragment {
     private List<UserWithExperience> userWithExperienceList = new ArrayList<>();
     private List<UserExperience> userExperienceList = new ArrayList<>();
     int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+    private UserExperienceViewModel userExperienceViewModel;
 
     public UserExperiences() {
         // Required empty public constructor
@@ -57,13 +59,15 @@ public class UserExperiences extends Fragment {
                 navController.navigate(R.id.addUserExperience);
             }
         });
+
+        userExperienceViewModel= ViewModelProviders.of(getActivity()).get(UserExperienceViewModel.class);
         userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
         userExperienceList = userViewModel.findUserWithExperiences(user_id).get(0).getUserExperiences();
-        mAdapter = new UserInfoAdapter(getActivity(),userExperienceList);
+        mAdapter = new UserInfoAdapter(getActivity(),userExperienceList,userExperienceViewModel);
         mRecyclerView = view.findViewById(R.id.userexperience_recyclerView);
 
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
         return view;
     }
 }

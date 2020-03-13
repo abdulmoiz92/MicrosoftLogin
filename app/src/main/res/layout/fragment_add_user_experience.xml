@@ -87,7 +87,7 @@
                     android:id="@+id/adduserexperience_workedfromdate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2/5/2020"/>
+                    android:text=""/>
                 <Button
                     android:id="@+id/adduserexperience_workedfrom"
                     android:layout_width="150dp"
@@ -108,7 +108,7 @@
                         android:id="@+id/adduserexperience_workedtilldate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2/5/2020"/>
+                        android:text=""/>
                     <Button
                         android:id="@+id/adduserexperience_workedtill"
                         android:layout_width="150dp"

@@ -1,25 +1,34 @@
 package com.example.microsftlogin.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.microsftlogin.R;
 import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
+import com.example.microsftlogin.UserExperienceDatabase.UserExperienceViewModel;
 
 import java.util.List;
 
 public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.UserInfoRecyclerHolder> {
     private List<UserExperience> userexperiencesArrayList;
     private LayoutInflater mInflater;
+    private UserExperienceViewModel userExperienceViewModel;
+    public ImageView deleteUserExperiencebtn;
 
-
-    class UserInfoRecyclerHolder extends RecyclerView.ViewHolder {
+    class UserInfoRecyclerHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        // User Experience Variable
         public TextView jobTitle;
         public TextView companyName;
         public TextView workedFrom;
@@ -27,6 +36,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.UserIn
         public TextView companyAddress;
         public TextView tasksPerformed;
         public UserInfoAdapter mAdapter;
+        public ImageView editUserExperiencebtn;
+        private UserExperienceViewModel userExperienceViewModel;
 
         public UserInfoRecyclerHolder(@NonNull View itemView, UserInfoAdapter mAdapter) {
             super(itemView);
@@ -36,18 +47,63 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.UserIn
             workedTill = itemView.findViewById(R.id.userexperience_list_worked_from);
             companyAddress = itemView.findViewById(R.id.userexperience_companyAddress);
             tasksPerformed = itemView.findViewById(R.id.userexperience_tasksPerformed);
+            editUserExperiencebtn = itemView.findViewById(R.id.edituserexperience_btn);
+            deleteUserExperiencebtn = itemView.findViewById(R.id.deleteuserexperience_btn);
             this.mAdapter = mAdapter;
+
+            editUserExperiencebtn.setOnClickListener(this);
+            deleteUserExperiencebtn.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.edituserexperience_btn:
+                    Bundle args = new Bundle();
+                    args.putInt("ActionToPerform",2);
+                    args.putInt("UserExperiencePosition",getAdapterPosition());
+                    args.putInt("UserExperienceId",userexperiencesArrayList.get(getAdapterPosition()).getId());
+                    args.putString("JobTitle",userexperiencesArrayList.get(getAdapterPosition()).getJobTitle());
+                    args.putString("CompanyName",userexperiencesArrayList.get(getAdapterPosition()).getCompanyName());
+                    args.putString("WorkedFrom",userexperiencesArrayList.get(getAdapterPosition()).getWorkedFrom());
+                    args.putString("WorkedTill",userexperiencesArrayList.get(getAdapterPosition()).getWorkedTill());
+                    args.putString("CompanyAddress",userexperiencesArrayList.get(getAdapterPosition()).getCityOrCountry());
+                    args.putString("TasksPerformed",userexperiencesArrayList.get(getAdapterPosition()).getTasksPerformed());
+                    Navigation.findNavController(v).navigate(R.id.addUserExperience,args);
+                break;
+
+                case R.id.deleteuserexperience_btn:
+                    UserExperience currentExperience = getUserExperienceAt(getAdapterPosition());
+                    UserExperience userExperienceToDelete = new UserExperience(currentExperience.getId(),
+                            currentExperience.getJobTitle(),currentExperience.getCompanyName(),
+                            currentExperience.getWorkedFrom(),currentExperience.getWorkedTill(),currentExperience.getCityOrCountry(),
+                            currentExperience.getTasksPerformed(),currentExperience.getUserId());
+                    if (currentExperience != null) {
+                        mAdapter.userExperienceViewModel.delete(userExperienceToDelete);
+                    } else {
+
+                    }
+                    userexperiencesArrayList.remove(getAdapterPosition());
+                    notifyDataSetChanged();
+                break;
+            }
+
         }
     }
 
-   public UserInfoAdapter(Context context, List<UserExperience> userExperienceList) {
+   public UserInfoAdapter(Context context, List<UserExperience> userExperienceList,UserExperienceViewModel _userExperienceViewModel) {
         mInflater = LayoutInflater.from(context);
+        this.userExperienceViewModel = userExperienceViewModel;
         this.userexperiencesArrayList = userExperienceList;
+        this.userExperienceViewModel = _userExperienceViewModel;
     }
 
-    public void setUserExperiences(List<UserExperience> userExperiences) {
-        userexperiencesArrayList = userExperiences;
-        notifyDataSetChanged();
+    public UserExperience getUserExperienceAt(int position) {
+        if (userexperiencesArrayList.size() > 0) {
+            return userexperiencesArrayList.get(position);
+        } else {
+            return null;
+        }
     }
 
     @NonNull

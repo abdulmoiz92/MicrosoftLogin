@@ -21,4 +21,8 @@ public class UserExperienceViewModel extends AndroidViewModel {
     public LiveData<List<UserExperience>> getAllUsersExperience() { return allUsersExperience; }
 
     public void insert(UserExperience userExperience) { userExperienceRepository.insert(userExperience); }
+
+    public void update(UserExperience userExperience) { userExperienceRepository.update(userExperience); }
+
+    public void delete(UserExperience userExperience) { userExperienceRepository.delete(userExperience); }
 }
