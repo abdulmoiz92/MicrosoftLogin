@@ -36,11 +36,13 @@
         android:textSize="18dp"
         android:text="Add All Your Achievements Here"/>
 
-    <LinearLayout
-        android:id="@+id/userachievements_div"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userachievements_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:orientation="vertical"
@@ -48,17 +50,17 @@
 
 
 
-    </LinearLayout>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/userachievements_formsdiv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/userachievements_div">
+        app:layout_constraintTop_toBottomOf="@id/userachievements_recyclerview">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/adduserachievements_achievementname"

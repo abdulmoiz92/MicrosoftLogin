@@ -9,6 +9,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 
 import com.example.microsftlogin.UserDatabaseRelation.UserWithAbout;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithAchievement;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithEducation;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithExperience;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithProject;
@@ -73,5 +74,13 @@ public interface UserDao {
     @Transaction
     @Query("SELECT * FROM user_table WHERE id = :userId")
     List<UserWithProject> findUserWithProject(int userId);
+
+    @Transaction
+    @Query("SELECT * FROM user_table")
+    LiveData<List<UserWithAchievement>> getAllUserWithAchievement();
+
+    @Transaction
+    @Query("SELECT * FROM user_table WHERE id = :userId")
+    List<UserWithAchievement> findUserWithAchievement(int userId);
 
 }

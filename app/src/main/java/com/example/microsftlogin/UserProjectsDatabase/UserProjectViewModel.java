@@ -21,4 +21,8 @@ public class UserProjectViewModel extends AndroidViewModel {
     public LiveData<List<UserProject>> getAllUserProjects() { return allUserProjects; }
 
     public void insert(UserProject userProject) { userProjectRepository.insert(userProject); }
+
+    public void update(UserProject userProject) { userProjectRepository.update(userProject); }
+
+    public void delete(UserProject userProject) { userProjectRepository.delete(userProject); }
 }

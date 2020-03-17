@@ -7,8 +7,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.microsftlogin.UserDatabaseRelation.UserWithAbout;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithAchievement;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithEducation;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithExperience;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithProject;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithSkill;
 
 import java.util.List;
@@ -20,6 +22,8 @@ public class UserRepository {
     private LiveData<List<UserWithExperience>> allUsersWithExperience;
     private LiveData<List<UserWithEducation>> allUsersWithEducation;
     private LiveData<List<UserWithSkill>> allUsersWithSkill;
+    private LiveData<List<UserWithProject>> allUsersWithProjects;
+    private LiveData<List<UserWithAchievement>> allUsersWithAchievements;
 
     UserRepository(Application application) {
         UserRoomDatabase db = UserRoomDatabase.getDatabase(application);
@@ -29,6 +33,8 @@ public class UserRepository {
         allUsersWithExperience = userDao.getAllUserWithExperience();
         allUsersWithEducation = userDao.getAllUserWithEducation();
         allUsersWithSkill = userDao.getAllUserWithSkill();
+        allUsersWithProjects = userDao.getAllUserWithProject();
+        allUsersWithAchievements = userDao.getAllUserWithAchievement();
     }
 
 
@@ -54,7 +60,14 @@ public class UserRepository {
     public LiveData<List<UserWithSkill>> getAllUserWithSkill() { return allUsersWithSkill; }
     public List<UserWithSkill> findUserWithSkill(int id) { return userDao.findUserWithSkill(id); }
 
+    // User With Project
+    public LiveData<List<UserWithProject>> getAllUsersWithProjects() { return allUsersWithProjects; }
+    public List<UserWithProject> findUserWithProject(int id) { return userDao.findUserWithProject(id); }
 
+
+    // User With Achievement
+    public LiveData<List<UserWithAchievement>> getAllUsersWithAchievements() { return allUsersWithAchievements; }
+    public List<UserWithAchievement> findUserWithAchievement(int id) { return userDao.findUserWithAchievement(id); }
 
     // User Functions
 

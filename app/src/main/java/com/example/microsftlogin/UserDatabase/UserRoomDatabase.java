@@ -14,6 +14,8 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import com.example.microsftlogin.AboutUserDatabase.AboutUser;
 import com.example.microsftlogin.AboutUserDatabase.AboutUserDao;
+import com.example.microsftlogin.UserAchievementsDatabase.UserAchievement;
+import com.example.microsftlogin.UserAchievementsDatabase.UserAchievementDao;
 import com.example.microsftlogin.UserEducationDatabase.UserEducation;
 import com.example.microsftlogin.UserEducationDatabase.UserEducationDao;
 import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
@@ -23,8 +25,8 @@ import com.example.microsftlogin.UserProjectsDatabase.UserProjectDao;
 import com.example.microsftlogin.UserSkillsDatabase.UserSkill;
 import com.example.microsftlogin.UserSkillsDatabase.UserSkillDao;
 
-@Database(entities = {User.class,AboutUser.class,UserExperience.class, UserEducation.class, UserSkill.class, UserProject.class},
-        version = 10, exportSchema = false)
+@Database(entities = {User.class,AboutUser.class,UserExperience.class, UserEducation.class, UserSkill.class,
+        UserProject.class, UserAchievement.class}, version = 11, exportSchema = false)
 public abstract class UserRoomDatabase extends RoomDatabase {
 
     public abstract UserDao userDao();
@@ -33,6 +35,7 @@ public abstract class UserRoomDatabase extends RoomDatabase {
     public abstract UserEducationDao userEducationDao();
     public abstract UserSkillDao userSkillDao();
     public abstract UserProjectDao userProjectDao();
+    public abstract UserAchievementDao userAchievementDao();
 
     public static UserRoomDatabase INSTANCE;
 
@@ -75,6 +78,7 @@ public abstract class UserRoomDatabase extends RoomDatabase {
         private final UserEducationDao userEducationDao;
         private final UserSkillDao userSkillDao;
         private final UserProjectDao userProjectDao;
+        private final UserAchievementDao userAchievementDao;
 
         PopulateDbAsync(UserRoomDatabase db) {
             this.dao = db.userDao();
@@ -83,6 +87,7 @@ public abstract class UserRoomDatabase extends RoomDatabase {
             this.userEducationDao = db.userEducationDao();
             this.userSkillDao = db.userSkillDao();
             this.userProjectDao = db.userProjectDao();
+            this.userAchievementDao = db.userAchievementDao();
         }
 
         @Override
@@ -94,6 +99,7 @@ public abstract class UserRoomDatabase extends RoomDatabase {
             userEducationDao.getAllUserEducation();
             userSkillDao.getAllUserSkills();
             userProjectDao.getAllUserProject();
+            userAchievementDao.getAllUserAchievements();
 
             return null;
         }

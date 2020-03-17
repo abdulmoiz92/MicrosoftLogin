@@ -8,8 +8,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.microsftlogin.UserDatabaseRelation.UserWithAbout;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithAchievement;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithEducation;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithExperience;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithProject;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithSkill;
 import com.example.microsftlogin.UserEducationDatabase.UserEducation;
 
@@ -22,6 +24,8 @@ public class UserViewModel extends AndroidViewModel {
     private LiveData<List<UserWithExperience>> allUsersWithExperience;
     private LiveData<List<UserWithEducation>> allUserWithEducation;
     private LiveData<List<UserWithSkill>> allUserWithSkill;
+    private LiveData<List<UserWithProject>> allUsersWithProjets;
+    private LiveData<List<UserWithAchievement>> allUsersWithAchievements;
 
     public UserViewModel(@NonNull Application application) {
         super(application);
@@ -31,6 +35,8 @@ public class UserViewModel extends AndroidViewModel {
         allUsersWithExperience = userRepository.getAllUsersWithExperience();
         allUserWithEducation = userRepository.getAllUserWithEducation();
         allUserWithSkill = userRepository.getAllUserWithSkill();
+        allUsersWithProjets = userRepository.getAllUsersWithProjects();
+        allUsersWithAchievements = userRepository.getAllUsersWithAchievements();
     }
 
 
@@ -71,4 +77,15 @@ public class UserViewModel extends AndroidViewModel {
 
     public List<UserWithSkill> findUserWithSkill(int id) { return userRepository.findUserWithSkill(id); }
 
+    //Users Projects Information
+
+
+    public LiveData<List<UserWithProject>> getAllUsersWithProjets() { return allUsersWithProjets; }
+
+    public List<UserWithProject> findUserWithProject(int id) { return userRepository.findUserWithProject(id); }
+
+    //Users Achievements Information
+
+    public LiveData<List<UserWithAchievement>> getAllUsersWithAchievement() { return allUsersWithAchievements; }
+    public List<UserWithAchievement> findUserWithAchievement(int id) { return userRepository.findUserWithAchievement(id); }
 }
