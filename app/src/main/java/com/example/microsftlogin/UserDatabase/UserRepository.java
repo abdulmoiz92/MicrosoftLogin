@@ -7,7 +7,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.microsftlogin.UserDatabaseRelation.UserWithAbout;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithEducation;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithExperience;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithSkill;
 
 import java.util.List;
 
@@ -16,6 +18,8 @@ public class UserRepository {
     private LiveData<List<User>> allUsers;
     private LiveData<List<UserWithAbout>> allUsersWithAbout;
     private LiveData<List<UserWithExperience>> allUsersWithExperience;
+    private LiveData<List<UserWithEducation>> allUsersWithEducation;
+    private LiveData<List<UserWithSkill>> allUsersWithSkill;
 
     UserRepository(Application application) {
         UserRoomDatabase db = UserRoomDatabase.getDatabase(application);
@@ -23,6 +27,8 @@ public class UserRepository {
         allUsers = userDao.getAllUser();
         allUsersWithAbout = userDao.getAllUsersWithAbout();
         allUsersWithExperience = userDao.getAllUserWithExperience();
+        allUsersWithEducation = userDao.getAllUserWithEducation();
+        allUsersWithSkill = userDao.getAllUserWithSkill();
     }
 
 
@@ -38,6 +44,15 @@ public class UserRepository {
     public LiveData<List<UserWithExperience>> getAllUsersWithExperience() { return allUsersWithExperience; }
 
     public List<UserWithExperience> findUserWithExperience(int id) { return userDao.findUserWithExperience(id); }
+
+    // User With Education
+    public LiveData<List<UserWithEducation>> getAllUserWithEducation() { return allUsersWithEducation; }
+
+    public List<UserWithEducation> findUserWithEducation(int id) { return userDao.findUserWithEducation(id); }
+
+    // User With Skill
+    public LiveData<List<UserWithSkill>> getAllUserWithSkill() { return allUsersWithSkill; }
+    public List<UserWithSkill> findUserWithSkill(int id) { return userDao.findUserWithSkill(id); }
 
 
 
@@ -60,16 +75,4 @@ public class UserRepository {
             return null;
         }
     }
-
-
-  /* private static class findAsyncTask extends AsyncTask<String, Void, LiveData<List<User>>> {
-        private UserDao mAsyncTaskDao;
-
-        findAsyncTask(UserDao userDao) { this.mAsyncTaskDao = userDao; }
-
-       @Override
-       protected LiveData<List<User>> doInBackground(String... strings) {
-           return mAsyncTaskDao.find(strings[0]);
-       }
-   } */
 }

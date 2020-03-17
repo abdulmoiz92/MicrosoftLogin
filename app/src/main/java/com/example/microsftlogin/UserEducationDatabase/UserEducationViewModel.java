@@ -22,4 +22,8 @@ public class UserEducationViewModel extends AndroidViewModel {
 
     public void insert(UserEducation userEducation) { userEducationRepository.insert(userEducation); }
 
+    public void update(UserEducation userEducation) { userEducationRepository.update(userEducation); }
+
+    public void delete(UserEducation userEducation) { userEducationRepository.delete(userEducation); }
+
 }

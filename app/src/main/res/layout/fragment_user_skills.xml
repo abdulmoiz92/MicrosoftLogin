@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EditCvFragements.AboutUserFragment">
@@ -32,35 +36,50 @@
         android:textSize="18dp"
         android:text="Add All Your SKills Tag Here"/>
 
-    <LinearLayout
-        android:id="@+id/userskills_div"
+    <TextView
+        android:id="@+id/userskills_note"
+        android:layout_width="270dp"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:textAlignment="center"
+        android:text="Note: Swipe Left | Right To Delete"
+        app:layout_constraintTop_toBottomOf="@id/userskills_description"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userskills_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="220dp"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/userskills_description">
+        app:layout_constraintTop_toBottomOf="@id/userskills_note"
+        />
 
-
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/userskills_formsdiv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/userskills_div">
+        app:layout_constraintTop_toBottomOf="@id/userskills_recyclerView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/adduserskill_skillname"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="0dp"
             android:gravity="center"
             android:layout_gravity="center"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -104,3 +123,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

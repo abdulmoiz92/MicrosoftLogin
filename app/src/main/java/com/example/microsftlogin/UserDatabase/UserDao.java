@@ -9,7 +9,10 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 
 import com.example.microsftlogin.UserDatabaseRelation.UserWithAbout;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithEducation;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithExperience;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithProject;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithSkill;
 
 import java.util.List;
 
@@ -46,4 +49,29 @@ public interface UserDao {
     @Transaction
     @Query("SELECT * FROM user_table WHERE id = :userId")
     List<UserWithExperience> findUserWithExperience(int userId);
+
+    @Transaction
+    @Query("SELECT * FROM user_table")
+    LiveData<List<UserWithEducation>> getAllUserWithEducation();
+
+    @Transaction
+    @Query("SELECT * FROM user_table WHERE id = :userId")
+    List<UserWithEducation> findUserWithEducation(int userId);
+
+    @Transaction
+    @Query("SELECT * FROM user_table")
+    LiveData<List<UserWithSkill>> getAllUserWithSkill();
+
+    @Transaction
+    @Query("SELECT * FROM user_table WHERE id = :userId")
+    List<UserWithSkill> findUserWithSkill(int userId);
+
+    @Transaction
+    @Query("SELECT * FROM user_table")
+    LiveData<List<UserWithProject>> getAllUserWithProject();
+
+    @Transaction
+    @Query("SELECT * FROM user_table WHERE id = :userId")
+    List<UserWithProject> findUserWithProject(int userId);
+
 }

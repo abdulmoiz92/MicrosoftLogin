@@ -3,7 +3,6 @@ package com.example.microsftlogin.EditCvFragements;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,8 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.microsftlogin.Adapter.TodoRecyclerAdapter;
-import com.example.microsftlogin.Adapter.UserInfoAdapter;
+import com.example.microsftlogin.Adapter.UserExperienceAdapter;
 import com.example.microsftlogin.R;
 import com.example.microsftlogin.UserDatabase.UserViewModel;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithExperience;
@@ -35,8 +33,8 @@ public class UserExperiences extends Fragment {
     private NavController navController;
     private UserViewModel userViewModel;
     private RecyclerView mRecyclerView;
-    private UserInfoAdapter mAdapter;
-    private List<UserWithExperience> userWithExperienceList = new ArrayList<>();
+    private UserExperienceAdapter mAdapter;
+   // private List<UserWithExperience> userWithExperienceList = new ArrayList<>();
     private List<UserExperience> userExperienceList = new ArrayList<>();
     int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
     private UserExperienceViewModel userExperienceViewModel;
@@ -63,7 +61,7 @@ public class UserExperiences extends Fragment {
         userExperienceViewModel= ViewModelProviders.of(getActivity()).get(UserExperienceViewModel.class);
         userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
         userExperienceList = userViewModel.findUserWithExperiences(user_id).get(0).getUserExperiences();
-        mAdapter = new UserInfoAdapter(getActivity(),userExperienceList,userExperienceViewModel);
+        mAdapter = new UserExperienceAdapter(getActivity(),userExperienceList,userExperienceViewModel);
         mRecyclerView = view.findViewById(R.id.userexperience_recyclerView);
 
         mRecyclerView.setAdapter(mAdapter);

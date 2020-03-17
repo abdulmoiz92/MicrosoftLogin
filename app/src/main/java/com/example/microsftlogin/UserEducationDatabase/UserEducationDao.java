@@ -2,8 +2,10 @@ package com.example.microsftlogin.UserEducationDatabase;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -14,4 +16,10 @@ public interface UserEducationDao {
 
     @Insert
     void insert(UserEducation userEducation);
+
+    @Update
+    void update(UserEducation userEducation);
+
+    @Delete
+    void delete(UserEducation userEducation);
 }

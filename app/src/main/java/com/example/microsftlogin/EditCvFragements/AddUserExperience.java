@@ -2,9 +2,7 @@ package com.example.microsftlogin.EditCvFragements;
 
 import android.os.Bundle;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
@@ -14,8 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.microsftlogin.Adapter.UserInfoAdapter;
-import com.example.microsftlogin.Helpers.DatepickerFragment;
+import com.example.microsftlogin.Adapter.UserExperienceAdapter;
 import com.example.microsftlogin.Helpers.WorkPickerFragment;
 import com.example.microsftlogin.R;
 import com.example.microsftlogin.UserDatabase.UserViewModel;
@@ -65,7 +62,6 @@ public class AddUserExperience extends Fragment {
         adduserexperienceWorkedFrom = view.findViewById(R.id.adduserexperience_workedfrom);
         adduserexperienceWorkedTill = view.findViewById(R.id.adduserexperience_workedtill);
         adduserexperienceSubmit = view.findViewById(R.id.adduserexperience_submit);
-        final UserInfoAdapter adapter = new UserInfoAdapter(getActivity(), allUserExpiriences,userExperienceViewModel);
 
 
         int userexperienceIdReceived;
@@ -93,8 +89,6 @@ public class AddUserExperience extends Fragment {
 
 
         if (getArguments() != null) {
-            int actionToPerform = getArguments().getInt("ActionToPerform");
-            userexperienceIdReceived = getArguments().getInt("UserExperienceId");
             String jobTitleReceived = getArguments().getString("JobTitle");
             String companyNameReceived = getArguments().getString("CompanyName");
             String workedFromReceived = getArguments().getString("WorkedFrom");

@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,11 +18,17 @@ import com.example.microsftlogin.UserExperienceDatabase.UserExperienceViewModel;
 
 import java.util.List;
 
-public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.UserInfoRecyclerHolder> {
+public class UserExperienceAdapter extends RecyclerView.Adapter<UserExperienceAdapter.UserInfoRecyclerHolder> {
     private List<UserExperience> userexperiencesArrayList;
     private LayoutInflater mInflater;
     private UserExperienceViewModel userExperienceViewModel;
-    public ImageView deleteUserExperiencebtn;
+
+
+    public UserExperienceAdapter(Context context, List<UserExperience> userExperienceList, UserExperienceViewModel _userExperienceViewModel) {
+        mInflater = LayoutInflater.from(context);
+        this.userexperiencesArrayList = userExperienceList;
+        this.userExperienceViewModel = _userExperienceViewModel;
+    }
 
     class UserInfoRecyclerHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // User Experience Variable
@@ -35,11 +38,12 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.UserIn
         public TextView workedTill;
         public TextView companyAddress;
         public TextView tasksPerformed;
-        public UserInfoAdapter mAdapter;
+        public UserExperienceAdapter mAdapter;
         public ImageView editUserExperiencebtn;
-        private UserExperienceViewModel userExperienceViewModel;
+        public ImageView deleteUserExperiencebtn;
 
-        public UserInfoRecyclerHolder(@NonNull View itemView, UserInfoAdapter mAdapter) {
+
+        public UserInfoRecyclerHolder(@NonNull View itemView, UserExperienceAdapter mAdapter) {
             super(itemView);
             jobTitle = itemView.findViewById(R.id.userexperience_jobTitle);
             companyName = itemView.findViewById(R.id.userexperience_companyName);
@@ -80,22 +84,15 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.UserIn
                             currentExperience.getTasksPerformed(),currentExperience.getUserId());
                     if (currentExperience != null) {
                         mAdapter.userExperienceViewModel.delete(userExperienceToDelete);
+                        userexperiencesArrayList.remove(getAdapterPosition());
+                        notifyDataSetChanged();
                     } else {
 
                     }
-                    userexperiencesArrayList.remove(getAdapterPosition());
-                    notifyDataSetChanged();
                 break;
             }
 
         }
-    }
-
-   public UserInfoAdapter(Context context, List<UserExperience> userExperienceList,UserExperienceViewModel _userExperienceViewModel) {
-        mInflater = LayoutInflater.from(context);
-        this.userExperienceViewModel = userExperienceViewModel;
-        this.userexperiencesArrayList = userExperienceList;
-        this.userExperienceViewModel = _userExperienceViewModel;
     }
 
     public UserExperience getUserExperienceAt(int position) {
@@ -108,13 +105,13 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.UserIn
 
     @NonNull
     @Override
-    public UserInfoAdapter.UserInfoRecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UserExperienceAdapter.UserInfoRecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View mItemView = mInflater.inflate(R.layout.single_userexpirience,parent,false);
         return new UserInfoRecyclerHolder(mItemView,this);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserInfoAdapter.UserInfoRecyclerHolder holder, int position) {
+    public void onBindViewHolder(@NonNull UserExperienceAdapter.UserInfoRecyclerHolder holder, int position) {
         UserExperience mCurrent = userexperiencesArrayList.get(position);
 
         holder.jobTitle.setText(mCurrent.getJobTitle());

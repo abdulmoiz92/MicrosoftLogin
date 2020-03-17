@@ -8,7 +8,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.microsftlogin.UserDatabaseRelation.UserWithAbout;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithEducation;
 import com.example.microsftlogin.UserDatabaseRelation.UserWithExperience;
+import com.example.microsftlogin.UserDatabaseRelation.UserWithSkill;
+import com.example.microsftlogin.UserEducationDatabase.UserEducation;
 
 import java.util.List;
 
@@ -17,6 +20,8 @@ public class UserViewModel extends AndroidViewModel {
     private LiveData<List<User>> uAllUsers;
     private LiveData<List<UserWithAbout>> allUsersWithAbout;
     private LiveData<List<UserWithExperience>> allUsersWithExperience;
+    private LiveData<List<UserWithEducation>> allUserWithEducation;
+    private LiveData<List<UserWithSkill>> allUserWithSkill;
 
     public UserViewModel(@NonNull Application application) {
         super(application);
@@ -24,7 +29,8 @@ public class UserViewModel extends AndroidViewModel {
         uAllUsers = userRepository.getAllUsers();
         allUsersWithAbout = userRepository.getAllUsersWithAbout();
         allUsersWithExperience = userRepository.getAllUsersWithExperience();
-
+        allUserWithEducation = userRepository.getAllUserWithEducation();
+        allUserWithSkill = userRepository.getAllUserWithSkill();
     }
 
 
@@ -52,5 +58,17 @@ public class UserViewModel extends AndroidViewModel {
     public LiveData<List<UserWithExperience>> getAllUsersWithExperience() { return allUsersWithExperience; }
 
     public List<UserWithExperience> findUserWithExperiences(int id) { return userRepository.findUserWithExperience(id); }
+
+    //Users Education Information
+
+    public LiveData<List<UserWithEducation>> getAllUserWithEducation() { return allUserWithEducation; }
+
+    public List<UserWithEducation> findUserWithEducation(int id) { return userRepository.findUserWithEducation(id); }
+
+    //Users Skills Information
+
+    public LiveData<List<UserWithSkill>> getAllUserWithSkill() { return allUserWithSkill; }
+
+    public List<UserWithSkill> findUserWithSkill(int id) { return userRepository.findUserWithSkill(id); }
 
 }

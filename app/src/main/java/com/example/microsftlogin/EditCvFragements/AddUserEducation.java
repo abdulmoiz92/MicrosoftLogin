@@ -15,8 +15,10 @@ import android.widget.Toast;
 
 import com.example.microsftlogin.Helpers.WorkPickerFragment;
 import com.example.microsftlogin.R;
+import com.example.microsftlogin.UserDatabase.UserViewModel;
 import com.example.microsftlogin.UserEducationDatabase.UserEducation;
 import com.example.microsftlogin.UserEducationDatabase.UserEducationViewModel;
+import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class AddUserEducation extends Fragment {
     private TextInputLayout addusereducationSchoolAddress;
     private TextInputLayout addusereducationSubCourses;
     private Button addusereducationSubmitbtn;
+    private UserViewModel userViewModel;
 
     private List<UserEducation> userEducationList = new ArrayList<>();
 
@@ -60,13 +63,10 @@ public class AddUserEducation extends Fragment {
         addusereducationSubCourses = view.findViewById(R.id.addusereducation_description);
         addusereducationSubmitbtn = view.findViewById(R.id.addusereducation_submit);
 
+        int userEducationIdReceived;
+
         userEducationViewModel = ViewModelProviders.of(getActivity()).get(UserEducationViewModel.class);
-        userEducationViewModel.getAllUserEducations().observe(getActivity(), new Observer<List<UserEducation>>() {
-            @Override
-            public void onChanged(List<UserEducation> userEducations) {
-                userEducationList = userEducations;
-            }
-        });
+        userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
 
         addusereducationStudiedFrombtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,21 +86,63 @@ public class AddUserEducation extends Fragment {
             }
         });
 
+        if (getArguments() != null) {
+            String courseNameReceived = getArguments().getString("CourseName");
+            String schoolNameReceived = getArguments().getString("SchoolName");
+            String studiedFromReceived = getArguments().getString("StudiedFrom");
+            String studiedTillReceived = getArguments().getString("StudiedTill");
+            String schoolAddressReceived = getArguments().getString("SchoolAddress");
+            String subCoursesReceived = getArguments().getString("SubCourses");
+            addusereducationCourseName.getEditText().setText(courseNameReceived);
+            addusereducationSchool.getEditText().setText(schoolNameReceived);
+            addusereducationStudiedFromDate.setText(studiedFromReceived);
+            addusereducationStudiedTillDate.setText(studiedTillReceived);
+            addusereducationSchoolAddress.getEditText().setText(schoolAddressReceived);
+            addusereducationSubCourses.getEditText().setText(subCoursesReceived);
+        }
+
         addusereducationSubmitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int actionToPerform = 0;
+                if (getArguments() != null) {
+                    actionToPerform = getArguments().getInt("ActionToPerform");
+                }
                 String courseName = addusereducationCourseName.getEditText().getText().toString();
                 String schoolName = addusereducationSchool.getEditText().getText().toString();
                 String studiedFrom = addusereducationStudiedFromDate.getText().toString();
                 String studiedTill = addusereducationStudiedTillDate.getText().toString();
                 String schoolAddress = addusereducationSchoolAddress.getEditText().getText().toString();
-                String subCourses = addusereducationSubCourses.getEditText().toString();
+                String subCourses = addusereducationSubCourses.getEditText().getText().toString();
 
-                UserEducation newUserEducation = new UserEducation(courseName,schoolName,studiedFrom,studiedTill,
-                        schoolAddress,subCourses);
+                int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
 
-                userEducationViewModel.insert(newUserEducation);
-                Toast.makeText(getActivity(),"User Education Added",Toast.LENGTH_LONG).show();
+                if (actionToPerform == 2) {
+                    if (!courseName.equals("") && !schoolName.equals("") && !studiedFrom.equals("") &&
+                            !studiedFrom.equals("") && !schoolAddress.equals("") && !subCourses.equals("")) {
+                        final int userEducationIdReceived = getArguments().getInt("UserEducationId");
+
+                        UserEducation userEducationToBeUpdated = new UserEducation(userEducationIdReceived,courseName,schoolName
+                        ,studiedFrom,studiedTill,schoolAddress,subCourses,user_id);
+                        userEducationViewModel.update(userEducationToBeUpdated);
+                        Toast.makeText(getActivity(),"Your Education Is Been Updated",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getActivity(),"All Fields Need To Be Filled",Toast.LENGTH_LONG).show();
+                    }
+                }
+                else {
+                    if (!courseName.equals("") && !schoolName.equals("") && !studiedFrom.equals("") &&
+                            !studiedFrom.equals("") && !schoolAddress.equals("") && !subCourses.equals("")) {
+                        UserEducation newUserEducation = new UserEducation(courseName, schoolName, studiedFrom, studiedTill,
+                                schoolAddress, subCourses, user_id);
+
+                        userEducationViewModel.insert(newUserEducation);
+
+                        Toast.makeText(getActivity(), "Your Education Has Been Added", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getActivity(), "All Fields To Be Filled", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
