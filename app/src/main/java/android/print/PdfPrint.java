@@ -15,14 +15,12 @@ import com.example.microsftlogin.HomePage;
 
 import java.io.File;
 
-public class PdfPrint extends AppCompatActivity {
-    Context context;
+public class PdfPrint {
     private static final String TAG = PdfPrint.class.getSimpleName();
     private final PrintAttributes printAttributes;
 
-    public PdfPrint(Context context, PrintAttributes printAttributes) {
+    public PdfPrint(PrintAttributes printAttributes) {
         this.printAttributes = printAttributes;
-        this.context = context;
     }
 
     public void print(final PrintDocumentAdapter printAdapter, final File path, final String fileName) {
@@ -40,10 +38,6 @@ public class PdfPrint extends AppCompatActivity {
     }
 
     private ParcelFileDescriptor getOutputFile(File path, String fileName) {
-        if (ContextCompat.checkSelfPermission(context,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                   111);
-        }
 
         if (!path.exists()) {
             path.mkdirs();
@@ -58,9 +52,4 @@ public class PdfPrint extends AppCompatActivity {
         return null;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-    }
 }

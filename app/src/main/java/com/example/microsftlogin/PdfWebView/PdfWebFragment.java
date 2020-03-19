@@ -1,7 +1,11 @@
 package com.example.microsftlogin.PdfWebView;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -13,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.microsftlogin.AboutUserDatabase.AboutUser;
 import com.example.microsftlogin.R;
@@ -23,8 +28,10 @@ import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
 import com.example.microsftlogin.UserProjectsDatabase.UserProject;
 import com.example.microsftlogin.UserSkillsDatabase.UserSkill;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
+import com.itextpdf.text.DocumentException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -137,7 +144,17 @@ public class PdfWebFragment extends Fragment {
         printButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createWebPrintJob(webView);
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            111);
+                } else {
+                    try {
+                        createWebPrintJob(webView);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
 
             }
         });
@@ -252,14 +269,41 @@ public class PdfWebFragment extends Fragment {
     }
 
 
-    private void createWebPrintJob(WebView webView) {
-        String jobName = getString(R.string.app_name) + " Document";
-        PrintAttributes attributes = new PrintAttributes.Builder()
-                .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
-                .setResolution(new PrintAttributes.Resolution("pdf", "pdf", 600, 600))
-                .setMinMargins(PrintAttributes.Margins.NO_MARGINS).build();
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/PDFTest/");
-        PdfPrint pdfPrint = new PdfPrint(getActivity(),attributes);
-        pdfPrint.print(webView.createPrintDocumentAdapter(jobName), path, "output_" + System.currentTimeMillis() + ".pdf");
+    private void createWebPrintJob(WebView webView) throws Exception {
+        try {
+            String jobName = getString(R.string.app_name) + " Document";
+            PrintAttributes attributes = new PrintAttributes.Builder()
+                    .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+                    .setResolution(new PrintAttributes.Resolution("pdf", "pdf", 600, 600))
+                    .setMinMargins(PrintAttributes.Margins.NO_MARGINS).build();
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/PDFTest/");
+            PdfPrint pdfPrint = new PdfPrint(attributes);
+            pdfPrint.print(webView.createPrintDocumentAdapter(jobName), path, "output_" + System.currentTimeMillis() + ".pdf");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 111:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    try {
+                        createWebPrintJob(webView);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    // Permission Denied
+                    Toast.makeText(getActivity(), "WRITE_EXTERNAL Permission Denied", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }
