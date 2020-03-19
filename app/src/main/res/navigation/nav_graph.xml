@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_navfragmentdashboard_to_userAchievements"
             app:destination="@id/userAchievements" />
+        <action
+            android:id="@+id/action_navfragmentdashboard_to_pdfWebFragment"
+            app:destination="@id/pdfWebFragment" />
     </fragment>
     <fragment
         android:id="@+id/todolistFragment"
@@ -148,4 +151,8 @@
         android:id="@+id/userAchievements"
         android:name="com.example.microsftlogin.EditCvFragements.UserAchievements"
         android:label="Achievements" />
+    <fragment
+        android:id="@+id/pdfWebFragment"
+        android:name="com.example.microsftlogin.PdfWebView.PdfWebFragment"
+        android:label="PdfWebFragment" />
 </navigation>

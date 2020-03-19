@@ -26,7 +26,7 @@ import com.example.microsftlogin.UserSkillsDatabase.UserSkill;
 import com.example.microsftlogin.UserSkillsDatabase.UserSkillDao;
 
 @Database(entities = {User.class,AboutUser.class,UserExperience.class, UserEducation.class, UserSkill.class,
-        UserProject.class, UserAchievement.class}, version = 11, exportSchema = false)
+        UserProject.class, UserAchievement.class}, version = 12, exportSchema = false)
 public abstract class UserRoomDatabase extends RoomDatabase {
 
     public abstract UserDao userDao();

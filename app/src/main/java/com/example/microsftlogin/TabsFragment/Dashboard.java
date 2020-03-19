@@ -1,9 +1,18 @@
 package com.example.microsftlogin.TabsFragment;
 
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.text.LineBreaker;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -13,21 +22,44 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.microsftlogin.AboutUserDatabase.AboutUser;
+import com.example.microsftlogin.HomePage;
+import com.example.microsftlogin.PdfHelper.PdfCreator;
 import com.example.microsftlogin.TodoDatabase.Todo;
 import com.example.microsftlogin.Adapter.TodoRecyclerAdapter;
 import com.example.microsftlogin.Helpers.SharedPrefrenceHelper;
 import com.example.microsftlogin.R;
 import com.example.microsftlogin.TodoDatabase.TodoViewModel;
+import com.example.microsftlogin.UserDatabase.UserViewModel;
+import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
+import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
 import com.example.microsftlogin.dashboardsActivities.EditTodoFragmentDirections;
 import com.google.android.material.card.MaterialCardView;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -49,6 +81,7 @@ public class Dashboard extends Fragment implements View.OnClickListener {
     private MaterialCardView userSkillsCard;
     private MaterialCardView userProjectsCard;
     private MaterialCardView userAcheivementsCard;
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 111;
 
 
     public Dashboard() {
@@ -68,6 +101,7 @@ public class Dashboard extends Fragment implements View.OnClickListener {
         userProjectsCard = view.findViewById(R.id.userprojects);
         userAcheivementsCard = view.findViewById(R.id.userachievements);
         navController = Navigation.findNavController(getActivity(), R.id.fragment);
+        TextView makeYourCv = view.findViewById(R.id.makeyourcv);
        /* sph.tprefrences = getActivity().getSharedPreferences(sph.getTodoSharedfile(),MODE_PRIVATE);
         if(null != sph.getSpArray(SharedPrefrenceHelper.getTodo_Key(), todos))
             todosFromPref = sph.getSpArray(SharedPrefrenceHelper.getTodo_Key(), todos); */
@@ -103,6 +137,7 @@ public class Dashboard extends Fragment implements View.OnClickListener {
        userSkillsCard.setOnClickListener(this);
        userProjectsCard.setOnClickListener(this);
        userAcheivementsCard.setOnClickListener(this);
+       makeYourCv.setOnClickListener(this);
 
         return view;
     }
@@ -133,6 +168,102 @@ public class Dashboard extends Fragment implements View.OnClickListener {
             case R.id.userachievements:
                 navController.navigate(R.id.userAchievements);
             break;
+
+            case R.id.makeyourcv:
+
+                navController.navigate(R.id.pdfWebFragment);
+
+               /* int hasWriteStoragePermission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (hasWriteStoragePermission != PackageManager.PERMISSION_GRANTED) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CONTACTS)) {
+                            showMessageOKCancel("You Need To Allow Permission For Storage",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                                        REQUEST_CODE_ASK_PERMISSIONS );
+                                            }
+                                        }
+                                    });
+                            return;
+                        }
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                REQUEST_CODE_ASK_PERMISSIONS );
+                    }
+                    return;
+                } else {
+                    try {
+                        createPdf();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (DocumentException e) {
+                        e.printStackTrace();
+                    }
+                } */
+
+            break;
         }
+    }
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    private void createPdf() throws FileNotFoundException,DocumentException {
+        int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+        UserViewModel userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
+        AboutUser aboutUser = null;
+
+        File docsFolder = new File(Environment.getExternalStorageDirectory() + "/Documents");
+        if (!docsFolder.exists()) {
+            docsFolder.mkdir();
+            Log.i(TAG, "Created a new directory for PDF");
+        }
+
+        File pdfFile = new File(docsFolder.getAbsolutePath(), "Resume.pdf");
+        OutputStream output = new FileOutputStream(pdfFile);
+        Document document = new Document();
+        PdfWriter.getInstance(document, output);
+
+        document.open();
+        if (userViewModel.findUserWithAbout(user_id).get(0).getAboutUserList().size() > 0) {
+            aboutUser = userViewModel.findUserWithAbout(user_id).get(0).getAboutUser();
+            document.add(new Paragraph("Name: " + aboutUser.getName() + "\n"));
+            document.add(new Paragraph("Email: " + aboutUser.getEmail()));
+            document.add(new Paragraph("Phone: " + aboutUser.getPhone()));
+            document.add(new Paragraph("Address: " + aboutUser.getAddress()));
+            document.add(new Paragraph("Education Degree : " + aboutUser.getEducationDegree()));
+            document.add(new Paragraph("Description: " + aboutUser.getDescription()));
+            document.add(Chunk.NEWLINE);
+            document.add(new LineSeparator(0.5f, 40, null, 0, -5));
+            Toast.makeText(getActivity(),"File Created",Toast.LENGTH_LONG).show();
+        }
+
+        if (userViewModel.findUserWithExperiences(user_id).get(0).getUserExperiences().size() > 0) {
+            List<UserExperience> userExperienceList = userViewModel.findUserWithExperiences(user_id).get(0).getUserExperiences();
+            document.add(Chunk.NEWLINE);
+            document.add(Chunk.NEWLINE);
+            document.add(new Paragraph("Work Experiences"));
+            document.add(new LineSeparator(0.5f,20,null,0,-5));
+            document.add(Chunk.NEWLINE);
+            for (int i = 0; i < userViewModel.findUserWithExperiences(user_id).get(0).getUserExperiences().size();
+                 i++) {
+                document.add(new Paragraph(userExperienceList.get(i).getJobTitle()));
+                document.add(new Paragraph(userExperienceList.get(i).getCompanyName()));
+                document.add(new Paragraph(userExperienceList.get(i).getWorkedFrom() + " - "+
+                        userExperienceList.get(i).getWorkedTill()));
+                document.add(new Paragraph(userExperienceList.get(i).getCityOrCountry()));
+                document.add(new Paragraph(userExperienceList.get(i).getTasksPerformed()));
+                document.add(new LineSeparator(0.5f,20,null,0,-5));
+                document.add(Chunk.NEWLINE);
+            }
+        }
+        document.close();
     }
 }
