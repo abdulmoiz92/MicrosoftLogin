@@ -72,71 +72,30 @@ public class PdfWebFragment extends Fragment {
         Button printButton = view.findViewById(R.id.print_Button);
 
         String htmlDocument = "<html><body>" +
-                "<style>" +
-                "h1.heading {" +
-                "text-align:center;" +
-                "}" +
-                "div.experiences{" +
-                "width:70%;" +
-                "}" +
-                "hr {" +
-                "color:#000;" +
-                "}" +
-                "ul {" +
-                "list-style-type:none;" +
-                "margin:0;" +
-                "padding:0;" +
-                "}" +
-                "div.row {" +
-                "display:flex;" +
-                "width: 90%;" +
-                "flex-wrap: wrap;" +
-                "}" +
-                "div.column {" +
-                "flex: 30%;" +
-                "}" +
-                "h3.skill {" +
-                "background:#7E00FD;" +
-                "text-align:center;" +
-                "border: none;" +
-                "border-radius: 20px;" +
-                "text-decoration: none;" +
-                "padding: 10px;" +
-                "margin-left: 10px;" +
-                "margin-right:10px;" +
-                "color:#fff;" +
-                "}" +
-                "</style>" +
+                addStyles() +
+                "<div class= container-fluid>" +
+                "<div class= row>" +
 
-                "<h1 class=heading>Your CV</h1>" +
-                "</br>" +
-                addAboutUser() + "</br> <hr> </br>" +
-
-                "<div class=experiences>" +
-                "<h3> Work Experiences </h3> <hr> </br>" +
-                addUserExperience() +
-                "</div>" + "</br> </br>" +
-
-                "<div class=experiences>" +
-                "<h3> Education History </h3> <hr> </br>" +
-                addUserEducation() +
-                "</div>" + "</br> </br>" +
-
-                "<div>" +
-                "<h3> My Skills </h3> <hr> </br>" +
+                "<div class= col-lg-4>" +
+                "<div class= sidebar>" +
+                addAboutUser() +
+                "<br/><br/>" +
                 addUserSkills() +
-                "</div>" + "<br/> <br/>" +
-
-                "<div class=experiences>" +
-                "<h3> Projects Completed </h3> <hr> </br>" +
-                addUserProjects() +
-                "</div>" + "</br> </br>" +
-
-                "<div class=experiences>" +
-                "<h3> My Achievements </h3> <hr> </br>" +
+                "<br/><br/>" +
                 addUserAchievements() +
-                "</div>" + "</br> </br>" +
+                "</div>" +
+                "</div>" +
 
+                "<div class= col-lg-8>" +
+                addUserExperience() +
+                "<br/><br/>" +
+                addUserEducation() +
+                "<br/><br/>" +
+                addUserProjects() +
+                "</div>" +
+
+                "</div>" +
+                "</div>" +
                 "</body></html>";
 
         webView.loadDataWithBaseURL(null, htmlDocument, "text/html", "UTF-8", null);
@@ -163,12 +122,13 @@ public class PdfWebFragment extends Fragment {
 
     public String addAboutUser() {
         if (userViewModel.findUserWithAbout(user_id).get(0).getAboutUserList().size() > 0) {
-            return "<h2>" + aboutUser.getName() + "</h2>" +
-                    "<h4>" + aboutUser.getEmail() + "</h4>" +
-                    "<h4>" + aboutUser.getPhone() + "</h4>" +
-                    "<h4>" + aboutUser.getAddress() + "</h4>" +
-                    "<h4>" + aboutUser.getEducationDegree() + "</h4>" +
-                    "<p>" + aboutUser.getDescription() + "</h4>";
+            return "<h4>Contact</h4>" +
+                    "<p>" + aboutUser.getName() + "</p>" +
+                    "<p>" + aboutUser.getEmail() + "</p>" +
+                    "<p>" + aboutUser.getPhone() + "</p>" +
+                    "<p>" + aboutUser.getAddress() + "</p>" +
+                    "<p>" + aboutUser.getEducationDegree() + "</p>" +
+                    "<p>" + aboutUser.getDescription() + "</p>";
         } else {
             return "No User Information";
         }
@@ -176,17 +136,23 @@ public class PdfWebFragment extends Fragment {
 
     public String addUserExperience() {
         if (userExperiences.size() > 0) {
-            String experlist = "<ul>";
-            String endexperlist = "</ul>";
+            String experlist = "<div class=container-fluid> <h3>Work Experience</h3>";
+            String endexperlist = "</div>";
             String list = "";
 
             for (int i = 0; i < userExperiences.size(); i++) {
-                list = list + "<li>" + "<h4>" + userExperiences.get(i).getJobTitle() + "</h4>" +
+                list = list + "<div class= row>" +
+                        "<div class= col-lg-5>" +
+                        "<h4>" + userExperiences.get(i).getJobTitle() + "</h4>" +
                         "<h4>" + userExperiences.get(i).getCompanyName() + "</h4>" +
-                        "<span>" + userExperiences.get(i).getWorkedFrom() + " - " + userExperiences.get(i).getWorkedTill() +
-                        "</span>" +
+                        "<p>( " + userExperiences.get(i).getWorkedFrom() + "-" + userExperiences.get(i).getWorkedTill() + " )</p>" +
                         "<p>" + userExperiences.get(i).getCityOrCountry() + "</p>" +
-                        "<p>" + userExperiences.get(i).getTasksPerformed() + "</p> <hr>";
+                        "</div>" +
+
+                        "<div style= margin-top:25px; class= col-lg-6>" +
+                        "<span style= font-size:13px; line-height:1.8em;>"+ userExperiences.get(i).getTasksPerformed() + "</p>" +
+                        "</div>" +
+                        "</div>";
             }
 
             return experlist + list + endexperlist;
@@ -198,17 +164,18 @@ public class PdfWebFragment extends Fragment {
 
     public String addUserEducation() {
         if (userEducations.size() > 0) {
-            String educlist = "<ul>";
-            String endeduclist = "</ul>";
+            String educlist = "<div class= container-fluid> <h3>Education Information</h3> <div class= row>";
+            String endeduclist = "</div> </div>";
             String list = "";
 
             for (int i = 0; i < userExperiences.size(); i++) {
-                list = list + "<li>" + "<h4>" + userEducations.get(i).getCourseName() + "</h4>" +
-                        "<h4>" + userEducations.get(i).getSchoolOrWebsite() + "</h4>" +
-                        "<span>" + userEducations.get(i).getStudiedFrom() + " - " + userEducations.get(i).getStudiedTill() +
-                        "</span>" +
+                list = list  +
+                        "<div class= col-lg-6>" +
+                        "<h4>" + userEducations.get(i).getCourseName() + "</h4>" +
+                        "<h5>" + userEducations.get(i).getSchoolOrWebsite() + "</h5>" +
+                        "<p>" + userEducations.get(i).getStudiedFrom() + " - " + userEducations.get(i).getStudiedTill() + "</p>" +
                         "<p>" + userEducations.get(i).getCityOrCountry() + "</p>" +
-                        "<p>" + userEducations.get(i).getSubcoursesOrTasks() + "</p> <hr>";
+                        "</div>";
             }
 
             return educlist + list + endeduclist;
@@ -219,12 +186,12 @@ public class PdfWebFragment extends Fragment {
     }
 
     public String addUserSkills() {
-        String startrow = "<div class=row>";
+        String startrow = "<div> <h3>Skills</h3>";
         String list = "";
         String endrow = "</div>";
         if (userSkills.size() > 0) {
             for (int i = 0; i < userSkills.size(); i++) {
-                list = list + "<div class=column>" + "<h3 class=skill>" + userSkills.get(i).getSkillName() + "</h3>" + "</div>";
+                list = list + "<p>" + userSkills.get(i).getSkillName() + "</p>";
             }
             return startrow + list + endrow;
         } else {
@@ -234,13 +201,16 @@ public class PdfWebFragment extends Fragment {
 
     public String addUserProjects() {
         if (userProjects.size() > 0) {
-            String projectlist = "<ul>";
-            String endprojectlist = "</ul>";
+            String projectlist = "<div class= container-fluid> <h3>Projects Completed</h3> <div class= row>";
+            String endprojectlist = "</div> </div>";
             String list = "";
 
-            for (int i = 0; i < userExperiences.size(); i++) {
-                list = list + "<li>" + "<h4>" + userProjects.get(i).getProjectName() + "</h4>" +
-                        "<p>" + userProjects.get(i).getProjectTasks() + "</p> <hr>";
+            for (int i = 0; i < userProjects.size(); i++) {
+                list = list + "<div class=col-lg-5>" +
+                        "<h4>" + userProjects.get(i).getProjectName() + "</h4>" +
+                        "<p>" + userProjects.get(i).getProjectTasks() + "</p>" +
+                        "</div>" +
+                        "<div class = col-lg-1></div>";
             }
 
             return projectlist + list + endprojectlist;
@@ -252,13 +222,15 @@ public class PdfWebFragment extends Fragment {
 
     public String addUserAchievements() {
         if (userAchievements.size() > 0) {
-            String achlist = "<ul>";
-            String endachlist = "</ul>";
+            String achlist = "<div> <h3>Achievements</h3>";
+            String endachlist = "</div>";
             String list = "";
 
             for (int i = 0; i < userAchievements.size(); i++) {
-                list = list + "<li>" + "<h4>" + userAchievements.get(i).getAchievementName() + "</h4>" +
-                        "<p>" + userAchievements.get(i).getAchievementDescription() + "</p> <hr>";
+                list = list + "<div style=width:90%;>" +
+                        "<h5 style=margin-bottom:-5px;>" + userAchievements.get(i).getAchievementName() + "</h5>" +
+                        "<p style= font-size:12px;>" + userAchievements.get(i).getAchievementDescription() + "</p>" +
+                        "</div>";
             }
 
             return achlist + list + endachlist;
@@ -268,6 +240,71 @@ public class PdfWebFragment extends Fragment {
         }
     }
 
+    public String addStyles() {
+        return "<style>" +
+                "body {" +
+                "width: 100%;" +
+                "padding:0;" +
+                "margin-left:-20px;" +
+                "}" +
+                ".container-fluid {" +
+                "width: 100%;" +
+                "padding-right: 15px;" +
+                "padding-left: 15px;" +
+                "margin-right: auto;" +
+                "margin-left: auto;" +
+                "}" +
+                ".row {" +
+                "display: -ms-flexbox;" +
+                "display: flex;" +
+                "-ms-flex-wrap: wrap;" +
+                "flex-wrap: wrap;" +
+                "}" +
+                ".col-lg-1 {" +
+                "-ms-flex: 0 0 8.333333%;" +
+                "flex: 0 0 8.333333%;" +
+                "max-width: 8.333333%;" +
+                "}" +
+                ".col-lg-3 {" +
+                "-ms-flex: 0 0 25%;" +
+                "flex: 0 0 25%;" +
+                "max-width: 25%;" +
+                "}" +
+                ".col-lg-4 {" +
+                "-ms-flex: 0 0 33.333333%;" +
+                "flex: 0 0 33.333333%;" +
+                "max-width: 33.333333%;" +
+                "}" +
+                ".col-lg-5 {" +
+                "-ms-flex: 0 0 41.666667%;" +
+                "flex: 0 0 41.666667%;" +
+                "max-width: 41.666667%;" +
+                "}" +
+                ".col-lg-6 {" +
+                "-ms-flex: 0 0 50%;" +
+                "flex: 0 0 50%;" +
+                "max-width: 50%;" +
+                "  }" +
+                ".col-lg-7 {" +
+                "-ms-flex: 0 0 58.333333%;" +
+                "flex: 0 0 58.333333%;" +
+                "max-width: 58.333333%;" +
+                "}" +
+                ".col-lg-8 {" +
+                "-ms-flex: 0 0 66.666667%;" +
+                "flex: 0 0 66.666667%;" +
+                "max-width: 66.666667%;" +
+                "}" +
+                ".sidebar {" +
+                "background-color:#7E00FD;" +
+                "color:#fff;" +
+                "text-align: left !important;" +
+                "padding:15px;" +
+                "padding-left:10px;" +
+                "height: 1000px !important;" +
+                "}" +
+                "</style>";
+    }
 
     private void createWebPrintJob(WebView webView) throws Exception {
         try {
