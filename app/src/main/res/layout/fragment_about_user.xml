@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_person_purple_24dp"
-                    android:lineSpacingExtra="10dp" />
+                    android:drawablePadding="5dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,13 +54,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:hint="Email Address"
                 app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_email_purple_24dp" />
+                    android:drawableStart="@drawable/ic_email_purple_24dp"
+                    android:drawablePadding="5dp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,12 +71,14 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:hint="Phone Number"
                 app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
                     android:drawableStart="@drawable/ic_phone_android_purple_24dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -84,12 +88,14 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:hint="Address"
                 app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
                     android:drawableStart="@drawable/ic_location_on_purple_24dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -99,13 +105,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:hint="Education Degree"
                 app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_school_purple_24dp" />
+                    android:drawableStart="@drawable/ic_school_purple_24dp"
+                    android:drawablePadding="5dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,9 +121,11 @@
                 android:id="@+id/aboutuser_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:hint="@string/description"
                 app:counterEnabled="true"
+                android:gravity="center"
                 app:counterMaxLength="20"
                 app:helperTextEnabled="true">
 
@@ -123,25 +133,44 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:drawableTop="@drawable/ic_edit_purple_24dp"
-                    android:gravity="top|left"
+                    android:drawableStart="@drawable/ic_edit_purple_24dp"
+                    android:drawablePadding="5dp"
                     android:lines="8"
                     android:maxLines="10"
-                    android:minLines="6"
+                    android:minLines="5"
                     android:scrollbars="vertical"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
-            <Button
+            </LinearLayout>
 
-                android:id="@+id/aboutuser_submit"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="8dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorPrimary"
-                android:layout_gravity="end"
+                android:orientation="vertical"
+                android:gravity="right"
+                android:layout_marginTop="10dp">
+
+                <Button
+                android:id="@+id/aboutuser_submit"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
                 android:text="Update Info"
-                android:textColor="#fff" />
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:background="#7E00FD"
+                android:textColor="#fff"
+                android:layout_marginBottom="20dp" />
+
+                <ProgressBar
+                    android:id="@+id/aboutuser_progress"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"/>
+
         </LinearLayout>
 
 

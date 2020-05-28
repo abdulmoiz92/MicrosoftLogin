@@ -34,7 +34,7 @@
         android:textColor="#333"
         android:textAlignment="center"
         android:textSize="18dp"
-        android:text="Add All Your SKills Tag Here"/>
+        android:text="Add All Your Skills Tag Here"/>
 
     <TextView
         android:id="@+id/userskills_note"
@@ -45,7 +45,6 @@
         android:textAlignment="center"
         android:text="Note: Swipe Left | Right To Delete"
         app:layout_constraintTop_toBottomOf="@id/userskills_description"
-
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 

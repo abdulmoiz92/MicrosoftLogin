@@ -45,6 +45,8 @@ public class UserViewModel extends AndroidViewModel {
 
     public void insert(User user) { userRepository.insert(user); }
 
+    public void deleteAllUser() { userRepository.deleteAllUser(); }
+
     public List<User> findUser(String email) {  return userRepository.findUser(email); }
 
     public List<User> findUser(int id) { return userRepository.findUser(id); }
@@ -56,36 +58,36 @@ public class UserViewModel extends AndroidViewModel {
 
     public LiveData<List<UserWithAbout>> getAllUsersWithAbout() { return allUsersWithAbout; }
 
-    public List<UserWithAbout> findUserWithAbout(int id) { return userRepository.findUserWithAbout(id); }
+    public List<UserWithAbout> findUserWithAbout(String id) { return userRepository.findUserWithAbout(id); }
 
 
     // Users Experience Information
 
     public LiveData<List<UserWithExperience>> getAllUsersWithExperience() { return allUsersWithExperience; }
 
-    public List<UserWithExperience> findUserWithExperiences(int id) { return userRepository.findUserWithExperience(id); }
+    public List<UserWithExperience> findUserWithExperiences(String id) { return userRepository.findUserWithExperience(id); }
 
     //Users Education Information
 
     public LiveData<List<UserWithEducation>> getAllUserWithEducation() { return allUserWithEducation; }
 
-    public List<UserWithEducation> findUserWithEducation(int id) { return userRepository.findUserWithEducation(id); }
+    public List<UserWithEducation> findUserWithEducation(String id) { return userRepository.findUserWithEducation(id); }
 
     //Users Skills Information
 
     public LiveData<List<UserWithSkill>> getAllUserWithSkill() { return allUserWithSkill; }
 
-    public List<UserWithSkill> findUserWithSkill(int id) { return userRepository.findUserWithSkill(id); }
+    public List<UserWithSkill> findUserWithSkill(String id) { return userRepository.findUserWithSkill(id); }
 
     //Users Projects Information
 
 
     public LiveData<List<UserWithProject>> getAllUsersWithProjets() { return allUsersWithProjets; }
 
-    public List<UserWithProject> findUserWithProject(int id) { return userRepository.findUserWithProject(id); }
+    public List<UserWithProject> findUserWithProject(String id) { return userRepository.findUserWithProject(id); }
 
     //Users Achievements Information
 
     public LiveData<List<UserWithAchievement>> getAllUsersWithAchievement() { return allUsersWithAchievements; }
-    public List<UserWithAchievement> findUserWithAchievement(int id) { return userRepository.findUserWithAchievement(id); }
+    public List<UserWithAchievement> findUserWithAchievement(String id) { return userRepository.findUserWithAchievement(id); }
 }

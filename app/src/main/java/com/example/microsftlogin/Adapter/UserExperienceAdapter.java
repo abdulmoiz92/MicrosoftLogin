@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
@@ -15,6 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.microsftlogin.R;
 import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
 import com.example.microsftlogin.UserExperienceDatabase.UserExperienceViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -66,7 +74,7 @@ public class UserExperienceAdapter extends RecyclerView.Adapter<UserExperienceAd
                     Bundle args = new Bundle();
                     args.putInt("ActionToPerform",2);
                     args.putInt("UserExperiencePosition",getAdapterPosition());
-                    args.putInt("UserExperienceId",userexperiencesArrayList.get(getAdapterPosition()).getId());
+                    args.putString("UserExperienceId",userexperiencesArrayList.get(getAdapterPosition()).getId());
                     args.putString("JobTitle",userexperiencesArrayList.get(getAdapterPosition()).getJobTitle());
                     args.putString("CompanyName",userexperiencesArrayList.get(getAdapterPosition()).getCompanyName());
                     args.putString("WorkedFrom",userexperiencesArrayList.get(getAdapterPosition()).getWorkedFrom());
@@ -78,14 +86,27 @@ public class UserExperienceAdapter extends RecyclerView.Adapter<UserExperienceAd
 
                 case R.id.deleteuserexperience_btn:
                     UserExperience currentExperience = getUserExperienceAt(getAdapterPosition());
-                    UserExperience userExperienceToDelete = new UserExperience(currentExperience.getId(),
+                    final UserExperience userExperienceToDelete = new UserExperience(currentExperience.getId(),
                             currentExperience.getJobTitle(),currentExperience.getCompanyName(),
                             currentExperience.getWorkedFrom(),currentExperience.getWorkedTill(),currentExperience.getCityOrCountry(),
                             currentExperience.getTasksPerformed(),currentExperience.getUserId());
                     if (currentExperience != null) {
-                        mAdapter.userExperienceViewModel.delete(userExperienceToDelete);
-                        userexperiencesArrayList.remove(getAdapterPosition());
-                        notifyDataSetChanged();
+                        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                        DatabaseReference curExp = FirebaseDatabase.getInstance().getReference().child("users")
+                                .child(currentUser.getUid()).child("experiences").child(currentExperience.getId());
+                        curExp.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                mAdapter.userExperienceViewModel.delete(userExperienceToDelete);
+                                userexperiencesArrayList.remove(getAdapterPosition());
+                                notifyDataSetChanged();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(mInflater.getContext(), "Something Went Wrong Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     } else {
 
                     }

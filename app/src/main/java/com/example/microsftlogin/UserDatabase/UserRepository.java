@@ -44,34 +44,36 @@ public class UserRepository {
 
     public LiveData<List<UserWithAbout>> getAllUsersWithAbout() { return allUsersWithAbout; }
 
-    public List<UserWithAbout> findUserWithAbout(int id) { return userDao.findUserWithAbout(id); }
+    public List<UserWithAbout> findUserWithAbout(String id) { return userDao.findUserWithAbout(id); }
 
     // User With Experience
     public LiveData<List<UserWithExperience>> getAllUsersWithExperience() { return allUsersWithExperience; }
 
-    public List<UserWithExperience> findUserWithExperience(int id) { return userDao.findUserWithExperience(id); }
+    public List<UserWithExperience> findUserWithExperience(String id) { return userDao.findUserWithExperience(id); }
 
     // User With Education
     public LiveData<List<UserWithEducation>> getAllUserWithEducation() { return allUsersWithEducation; }
 
-    public List<UserWithEducation> findUserWithEducation(int id) { return userDao.findUserWithEducation(id); }
+    public List<UserWithEducation> findUserWithEducation(String id) { return userDao.findUserWithEducation(id); }
 
     // User With Skill
     public LiveData<List<UserWithSkill>> getAllUserWithSkill() { return allUsersWithSkill; }
-    public List<UserWithSkill> findUserWithSkill(int id) { return userDao.findUserWithSkill(id); }
+    public List<UserWithSkill> findUserWithSkill(String id) { return userDao.findUserWithSkill(id); }
 
     // User With Project
     public LiveData<List<UserWithProject>> getAllUsersWithProjects() { return allUsersWithProjects; }
-    public List<UserWithProject> findUserWithProject(int id) { return userDao.findUserWithProject(id); }
+    public List<UserWithProject> findUserWithProject(String id) { return userDao.findUserWithProject(id); }
 
 
     // User With Achievement
     public LiveData<List<UserWithAchievement>> getAllUsersWithAchievements() { return allUsersWithAchievements; }
-    public List<UserWithAchievement> findUserWithAchievement(int id) { return userDao.findUserWithAchievement(id); }
+    public List<UserWithAchievement> findUserWithAchievement(String id) { return userDao.findUserWithAchievement(id); }
 
     // User Functions
 
     public void insert(User user) { new insertAsyncTask(userDao).execute(user); }
+
+    public void deleteAllUser() { new deleteAllAsyncTask(userDao).execute(); }
 
     public List<User> findUser(String email) { return userDao.find(email); }
 
@@ -85,6 +87,18 @@ public class UserRepository {
         @Override
         protected Void doInBackground(User... params) {
             mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    private static class deleteAllAsyncTask extends AsyncTask<Void,Void,Void> {
+        private UserDao mAsyncTaskDao;
+
+        deleteAllAsyncTask(UserDao userDao) { this.mAsyncTaskDao = userDao; }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAllUser();
             return null;
         }
     }

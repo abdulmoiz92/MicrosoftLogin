@@ -26,4 +26,6 @@ public class UserEducationViewModel extends AndroidViewModel {
 
     public void delete(UserEducation userEducation) { userEducationRepository.delete(userEducation); }
 
+    public void deleteAllUserEducation() { userEducationRepository.deleteAllUserEducation(); }
+
 }

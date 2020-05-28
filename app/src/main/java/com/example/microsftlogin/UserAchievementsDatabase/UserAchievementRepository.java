@@ -25,6 +25,8 @@ public class UserAchievementRepository {
 
     public void delete(UserAchievement userAchievement) { new deleteAsyncTask(userAchievementDao).execute(userAchievement); }
 
+    public void deleteAllUserAchievements() { new deleteAllAsyncTask(userAchievementDao).execute(); }
+
     private static class insertAsyncTask extends AsyncTask<UserAchievement,Void,Void> {
         private UserAchievementDao mAysnTaskDao;
 
@@ -45,6 +47,18 @@ public class UserAchievementRepository {
         @Override
         protected Void doInBackground(UserAchievement... params) {
             mAsyncTaskDao.delete(params[0]);
+            return null;
+        }
+    }
+
+    private static class deleteAllAsyncTask extends AsyncTask<Void,Void,Void> {
+        private UserAchievementDao mAsyncTaskDao;
+
+        deleteAllAsyncTask(UserAchievementDao userAchievementDao) { this.mAsyncTaskDao = userAchievementDao; }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAllUserAchievements();
             return null;
         }
     }

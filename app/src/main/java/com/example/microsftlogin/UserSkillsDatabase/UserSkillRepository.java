@@ -25,6 +25,8 @@ public class UserSkillRepository {
 
     public void delete(UserSkill userSkill) { new deleteAsyncTask(userSkillDao).execute(userSkill); }
 
+    public void deleteAllUserSkill() { new deleteAllAsyncTask(userSkillDao).execute(); }
+
     private static class insertAyncTask extends AsyncTask<UserSkill,Void,Void> {
         private UserSkillDao mAsyncTaskDao;
 
@@ -46,6 +48,18 @@ public class UserSkillRepository {
         @Override
         protected Void doInBackground(UserSkill... params) {
             mAsyncTaskDao.delete(params[0]);
+            return null;
+        }
+    }
+
+    public static class deleteAllAsyncTask extends AsyncTask<Void,Void,Void> {
+        private UserSkillDao mAsyncTaskDao;
+
+        deleteAllAsyncTask(UserSkillDao userSkillDao) { this.mAsyncTaskDao = userSkillDao; }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAllUserSkill();
             return null;
         }
     }

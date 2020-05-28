@@ -25,7 +25,15 @@ import com.example.microsftlogin.UserDatabaseRelation.UserWithSkill;
 import com.example.microsftlogin.UserSkillsDatabase.UserSkill;
 import com.example.microsftlogin.UserSkillsDatabase.UserSkillViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -48,12 +56,12 @@ public class UserSkills extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_user_skills, container, false);
 
-        final int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+        final String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         addUserSkillName = view.findViewById(R.id.adduserskill_skillname);
         addUserSkillSubmit = view.findViewById(R.id.adduserskill_btn);
@@ -66,14 +74,30 @@ public class UserSkills extends Fragment {
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        final FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
 
         addUserSkillSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!addUserSkillName.getEditText().getText().toString().equals("") ) {
-                    UserSkill userSkillToAdd = new UserSkill(addUserSkillName.getEditText().getText().toString(),user_id);
-                    userSkillViewModel.insert(userSkillToAdd);
-                    mAdapter.addSkill(userSkillToAdd);
+                    DatabaseReference skillRef = FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(currentuser.getUid()).child("skills").push();
+                    final UserSkill userSkillToAdd = new UserSkill(skillRef.getKey(),addUserSkillName.getEditText().getText().toString(),user_id);
+                    skillRef.setValue(userSkillToAdd).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                userSkillViewModel.insert(userSkillToAdd);
+                                mAdapter.addSkill(userSkillToAdd);
+                                addUserSkillName.getEditText().setText("");
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
                     Toast.makeText(getActivity(),"Skill Name Need To Be Filled",Toast.LENGTH_LONG).show();
                 }
@@ -89,10 +113,22 @@ public class UserSkills extends Fragment {
 
                     @Override
                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                        int position = viewHolder.getAdapterPosition();
-                        UserSkill skill = mAdapter.getSkillAt(position);
-                        userSkillViewModel.delete(skill);
-                        mAdapter.deleteSkill(position);
+                        final int position = viewHolder.getAdapterPosition();
+                        final UserSkill skill = mAdapter.getSkillAt(position);
+                        DatabaseReference skillRef = FirebaseDatabase.getInstance().getReference().child("users")
+                                .child(currentuser.getUid()).child("skills").child(skill.getId());
+                        skillRef.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                userSkillViewModel.delete(skill);
+                                mAdapter.deleteSkill(position);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
         );

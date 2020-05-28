@@ -44,6 +44,7 @@ public class IntroScreenThree extends Fragment {
                 public void onClick(View v) {
                     Intent landingpage = new Intent(getActivity(), LandingPage.class);
                     startActivity(landingpage);
+                    getActivity().finish();
                 }
             });
 

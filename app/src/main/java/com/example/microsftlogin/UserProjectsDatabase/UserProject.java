@@ -8,8 +8,10 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "user_project_table")
 public class UserProject {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+
+    @NonNull
+    @PrimaryKey
+    private String id;
 
     @NonNull
     @ColumnInfo(name = "project_name")
@@ -21,27 +23,28 @@ public class UserProject {
 
     @NonNull
     @ColumnInfo(name = "projectuser_id")
-    private int userId;
+    private String userId;
 
-    public UserProject(String mProjectName, String mProjectTasks, int userId) {
-        this.mProjectName = mProjectName;
-        this.mProjectTasks = mProjectTasks;
-        this.userId = userId;
-    }
 
-    @Ignore
-    public UserProject(int id, String mProjectName, String mProjectTasks, int userId) {
+    public UserProject(String id, String mProjectName, String mProjectTasks, String userId) {
         this.id = id;
         this.mProjectName = mProjectName;
         this.mProjectTasks = mProjectTasks;
         this.userId = userId;
     }
 
-    public int getId() {
+    @Ignore
+    public UserProject() {
+        //For Datasnapshots
+    }
+
+
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -63,11 +66,12 @@ public class UserProject {
         this.mProjectTasks = mProjectTasks;
     }
 
-    public int getUserId() {
+    @NonNull
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(@NonNull String userId) {
         this.userId = userId;
     }
 }

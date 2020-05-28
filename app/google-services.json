@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "97923557560",
+    "firebase_url": "https://digital-cv-25b26.firebaseio.com",
+    "project_id": "digital-cv-25b26",
+    "storage_bucket": "digital-cv-25b26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97923557560:android:ed29b85e537c5e6df1ec4d",
+        "android_client_info": {
+          "package_name": "com.example.microsftlogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "97923557560-8icp56pq4v3jgjsl1h9dqhb5a4q4kib4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5aNkW2yTZaR_hSVNY_RPXnAsss42NNs0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "97923557560-8icp56pq4v3jgjsl1h9dqhb5a4q4kib4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

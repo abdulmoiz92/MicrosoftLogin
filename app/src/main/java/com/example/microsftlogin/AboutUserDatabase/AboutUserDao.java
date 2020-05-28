@@ -22,6 +22,9 @@ public interface AboutUserDao {
     @Update
     void update(AboutUser aboutUser);
 
+    @Query("DELETE from about_user_table")
+    void deleteAllAboutUser();
+
 
 
 }

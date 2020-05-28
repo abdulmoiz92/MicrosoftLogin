@@ -25,4 +25,6 @@ public class UserAchievementViewModel extends AndroidViewModel {
     public void insert(UserAchievement userAchievement) { userAchievementRepository.insert(userAchievement); }
 
     public void delete(UserAchievement userAchievement) { userAchievementRepository.delete(userAchievement); }
+
+    public void deleteAllUserAchievements() { userAchievementRepository.deleteAllUserAchievements(); }
 }

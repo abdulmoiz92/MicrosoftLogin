@@ -28,6 +28,7 @@ import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
 import com.example.microsftlogin.UserProjectsDatabase.UserProject;
 import com.example.microsftlogin.UserSkillsDatabase.UserSkill;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
+import com.google.firebase.auth.FirebaseAuth;
 import com.itextpdf.text.DocumentException;
 
 import java.io.File;
@@ -41,6 +42,7 @@ public class PdfWebFragment extends Fragment {
     WebView webView;
     private UserViewModel userViewModel;
     int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+    String user_id2 = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private AboutUser aboutUser;
     private List<UserExperience> userExperiences;
     private List<UserEducation> userEducations;
@@ -60,19 +62,21 @@ public class PdfWebFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pdf_web, container, false);
         userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
         aboutUser = null;
-        if (userViewModel.findUserWithAbout(user_id).get(0).getAboutUserList().size() > 0) {
-            aboutUser = userViewModel.findUserWithAbout(user_id).get(0).getAboutUser();
+        if (userViewModel.findUserWithAbout(user_id2).get(0).getAboutUserList().size() > 0) {
+            aboutUser = userViewModel.findUserWithAbout(user_id2).get(0).getAboutUser();
         }
-        userExperiences = userViewModel.findUserWithExperiences(user_id).get(0).getUserExperiences();
-        userEducations = userViewModel.findUserWithEducation(user_id).get(0).getUserEducations();
-        userSkills = userViewModel.findUserWithSkill(user_id).get(0).getUserSkills();
-        userProjects = userViewModel.findUserWithProject(user_id).get(0).getUserProjects();
-        userAchievements = userViewModel.findUserWithAchievement(user_id).get(0).getUserAchievements();
+        userExperiences = userViewModel.findUserWithExperiences(user_id2).get(0).getUserExperiences();
+        userEducations = userViewModel.findUserWithEducation(user_id2).get(0).getUserEducations();
+        userSkills = userViewModel.findUserWithSkill(user_id2).get(0).getUserSkills();
+        userProjects = userViewModel.findUserWithProject(user_id2).get(0).getUserProjects();
+        userAchievements = userViewModel.findUserWithAchievement(user_id2).get(0).getUserAchievements();
         webView = view.findViewById(R.id.pdfweb);
         Button printButton = view.findViewById(R.id.print_Button);
 
-        String htmlDocument = "<html><body>" +
+        String htmlDocument = "<html><head>" +
                 addStyles() +
+                "</head>" +
+                "<body class= maincontent>" +
                 "<div class= container-fluid>" +
                 "<div class= row>" +
 
@@ -121,7 +125,7 @@ public class PdfWebFragment extends Fragment {
     }
 
     public String addAboutUser() {
-        if (userViewModel.findUserWithAbout(user_id).get(0).getAboutUserList().size() > 0) {
+        if (userViewModel.findUserWithAbout(user_id2).get(0).getAboutUserList().size() > 0) {
             return "<h4>Contact</h4>" +
                     "<p>" + aboutUser.getName() + "</p>" +
                     "<p>" + aboutUser.getEmail() + "</p>" +
@@ -130,7 +134,7 @@ public class PdfWebFragment extends Fragment {
                     "<p>" + aboutUser.getEducationDegree() + "</p>" +
                     "<p>" + aboutUser.getDescription() + "</p>";
         } else {
-            return "No User Information";
+            return "<p>No User Information</p>";
         }
     }
 
@@ -142,7 +146,7 @@ public class PdfWebFragment extends Fragment {
 
             for (int i = 0; i < userExperiences.size(); i++) {
                 list = list + "<div class= row>" +
-                        "<div class= col-lg-5>" +
+                        "<div class= col-lg-6>" +
                         "<h4>" + userExperiences.get(i).getJobTitle() + "</h4>" +
                         "<h4>" + userExperiences.get(i).getCompanyName() + "</h4>" +
                         "<p>( " + userExperiences.get(i).getWorkedFrom() + "-" + userExperiences.get(i).getWorkedTill() + " )</p>" +
@@ -158,7 +162,9 @@ public class PdfWebFragment extends Fragment {
             return experlist + list + endexperlist;
 
         } else {
-            return "No Work Experiences Yet";
+            return "<div class= col-lg-6>" +
+                    "<p>No Work Experiences Yet</p>" +
+                    "</div>";
         }
     }
 
@@ -181,7 +187,9 @@ public class PdfWebFragment extends Fragment {
             return educlist + list + endeduclist;
 
         } else {
-            return "No Education History Yet";
+            return "<div class= col-lg-6>" +
+                    "<p>No Education History Yet</p>" +
+                    "</div>";
         }
     }
 
@@ -195,7 +203,7 @@ public class PdfWebFragment extends Fragment {
             }
             return startrow + list + endrow;
         } else {
-            return "No Skills Yet";
+            return "<p>No Skills Yet</p>";
         }
     }
 
@@ -216,7 +224,7 @@ public class PdfWebFragment extends Fragment {
             return projectlist + list + endprojectlist;
 
         } else {
-            return "No Projects Yet";
+            return "<p>No Projects Yet</p>";
         }
     }
 
@@ -236,17 +244,12 @@ public class PdfWebFragment extends Fragment {
             return achlist + list + endachlist;
 
         } else {
-            return "No Achievements Yet";
+            return "<p>No Achievements Yet</p>";
         }
     }
 
     public String addStyles() {
         return "<style>" +
-                "body {" +
-                "width: 100%;" +
-                "padding:0;" +
-                "margin-left:-20px;" +
-                "}" +
                 ".container-fluid {" +
                 "width: 100%;" +
                 "padding-right: 15px;" +
@@ -302,6 +305,9 @@ public class PdfWebFragment extends Fragment {
                 "padding:15px;" +
                 "padding-left:10px;" +
                 "height: 1000px !important;" +
+                "}" +
+                ".maincontent {" +
+                "width: 100% !important" +
                 "}" +
                 "</style>";
     }

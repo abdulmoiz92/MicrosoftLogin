@@ -1,9 +1,11 @@
 package com.example.microsftlogin;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,10 +18,18 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.microsftlogin.AboutUserDatabase.AboutUserViewModel;
 import com.example.microsftlogin.Helpers.SharedPrefrenceHelper;
 import com.example.microsftlogin.StartUpActivities.MainActivity;
+import com.example.microsftlogin.UserAchievementsDatabase.UserAchievementViewModel;
+import com.example.microsftlogin.UserDatabase.UserViewModel;
+import com.example.microsftlogin.UserEducationDatabase.UserEducationViewModel;
+import com.example.microsftlogin.UserExperienceDatabase.UserExperienceViewModel;
+import com.example.microsftlogin.UserProjectsDatabase.UserProjectViewModel;
+import com.example.microsftlogin.UserSkillsDatabase.UserSkillViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_EMAIL;
 import static com.example.microsftlogin.Utils.SharedPrefrenceUtil.USER_NAME;
@@ -34,6 +44,13 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     NavigationView navigationView;
     DrawerLayout drawer;
     View hView;
+    private UserViewModel userViewModel;
+    private AboutUserViewModel aboutUserViewModel;
+    private UserExperienceViewModel userExperienceViewModel;
+    private UserEducationViewModel userEducationViewModel;
+    private UserSkillViewModel userSkillViewModel;
+    private UserProjectViewModel userProjectViewModel;
+    private UserAchievementViewModel userAchievementViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +74,14 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
         //drawer_account_email.setText(sph.getSpString(sph.getEmail_Key()));
 
-
-
+        //View Models
+        userViewModel = ViewModelProviders.of(HomePage.this).get(UserViewModel.class);
+        aboutUserViewModel = ViewModelProviders.of(HomePage.this).get(AboutUserViewModel.class);
+        userEducationViewModel = ViewModelProviders.of(HomePage.this).get(UserEducationViewModel.class);
+        userExperienceViewModel = ViewModelProviders.of(HomePage.this).get(UserExperienceViewModel.class);
+        userSkillViewModel = ViewModelProviders.of(HomePage.this).get(UserSkillViewModel.class);
+        userProjectViewModel = ViewModelProviders.of(HomePage.this).get(UserProjectViewModel.class);
+        userAchievementViewModel = ViewModelProviders.of(HomePage.this).get(UserAchievementViewModel.class);
 
         /* Tab Layout */
 
@@ -139,7 +162,14 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
 
     public void logout_user_nav() {
-        SharedPrefrenceUtil.getInstance(getApplicationContext()).clearKey(SharedPrefrenceUtil.IS_LOGIN);
+        FirebaseAuth.getInstance().signOut();
+        userViewModel.deleteAllUser();
+        aboutUserViewModel.deleteAllAboutUser();
+        userExperienceViewModel.deleteAllUserExperience();
+        userEducationViewModel.deleteAllUserEducation();
+        userSkillViewModel.deleteAllUserSkill();
+        userProjectViewModel.deleteAllUserProjects();
+        userAchievementViewModel.deleteAllUserAchievements();
         Intent logoutintent = new Intent(HomePage.this, MainActivity.class);
         startActivity(logoutintent);
     }
@@ -157,8 +187,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     public void AddDrawer() {
-
-
         TextView drawer_account_name = hView.findViewById(R.id.drawer_account_name);
         drawer_account_name.setText(SharedPrefrenceUtil.getInstance(getApplicationContext()).getStringValue(USER_NAME));
         TextView drawer_account_email = hView.findViewById(R.id.drawer_account_email);
@@ -166,5 +194,18 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

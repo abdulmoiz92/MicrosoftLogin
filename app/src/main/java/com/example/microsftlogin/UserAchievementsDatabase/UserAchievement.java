@@ -3,12 +3,15 @@ package com.example.microsftlogin.UserAchievementsDatabase;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "user_achievement_table")
 public class UserAchievement {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+
+    @NonNull
+    @PrimaryKey
+    private String id;
 
     @NonNull
     @ColumnInfo(name = "achievement_name")
@@ -20,19 +23,26 @@ public class UserAchievement {
 
     @NonNull
     @ColumnInfo(name = "achievementuser_id")
-    private int userId;
+    private String userId;
 
-    public UserAchievement(String mAchievementName, String mAchievementDescription, int userId) {
+    public UserAchievement(String id,String mAchievementName, String mAchievementDescription, String userId) {
+        this.id = id;
         this.mAchievementName = mAchievementName;
         this.mAchievementDescription = mAchievementDescription;
         this.userId = userId;
     }
 
-    public int getId() {
+    @Ignore
+    public UserAchievement() {
+        //For Datasnapshots
+    }
+
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -54,11 +64,11 @@ public class UserAchievement {
         this.mAchievementDescription = mAchievementDescription;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 }

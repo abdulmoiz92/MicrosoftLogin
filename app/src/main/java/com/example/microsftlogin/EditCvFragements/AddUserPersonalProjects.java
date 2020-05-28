@@ -2,6 +2,7 @@ package com.example.microsftlogin.EditCvFragements;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -16,13 +17,19 @@ import com.example.microsftlogin.R;
 import com.example.microsftlogin.UserProjectsDatabase.UserProject;
 import com.example.microsftlogin.UserProjectsDatabase.UserProjectViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AddUserPersonalProjects extends Fragment {
-    int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+    String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private TextInputLayout addUserProjectName;
     private TextInputLayout addUserProjectTasks;
     private Button addUserProjectSubmit;
@@ -51,32 +58,56 @@ public class AddUserPersonalProjects extends Fragment {
 
         addUserProjectSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 int actionToPerform = 0;
                 if (getArguments() != null) {
                     actionToPerform = getArguments().getInt("ActionToPerform");
                 }
                 String projectName = addUserProjectName.getEditText().getText().toString();
                 String projectTasks = addUserProjectTasks.getEditText().getText().toString();
-                int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+                String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                 if (actionToPerform == 2) {
                  if (!projectName.equals("") && !projectTasks.equals("")) {
-                     final int userProjectIdReceived = getArguments().getInt("ProjectUserId");
-                     UserProject userProjectToUpdate = new UserProject(userProjectIdReceived,projectName,projectTasks,user_id);
-                     userProjectViewModel.update(userProjectToUpdate);
-                     Toast.makeText(getActivity(),"Your Project Has Been Updated",Toast.LENGTH_LONG).show();
-                     Navigation.findNavController(v).popBackStack();
-                     Navigation.findNavController(v).navigate(R.id.userPersonalProjects);
+                     final String userProjectIdReceived = getArguments().getString("ProjectUserId");
+                     final UserProject userProjectToUpdate = new UserProject(userProjectIdReceived,projectName,projectTasks,user_id);
+                     DatabaseReference projRef = FirebaseDatabase.getInstance().getReference().child("users")
+                             .child(user_id).child("projects").child(userProjectIdReceived);
+                     projRef.setValue(userProjectToUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                         @Override
+                         public void onSuccess(Void aVoid) {
+                             userProjectViewModel.update(userProjectToUpdate);
+                             Toast.makeText(getActivity(),"Your Project Has Been Updated",Toast.LENGTH_LONG).show();
+                             Navigation.findNavController(v).navigateUp();
+                         }
+                     }).addOnFailureListener(new OnFailureListener() {
+                         @Override
+                         public void onFailure(@NonNull Exception e) {
+                             Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                         }
+                     });
                  } else {
                      Toast.makeText(getActivity(), "All Fields Need To Be Filled", Toast.LENGTH_SHORT).show();
                  }
                 }
                 else {
                     if (!projectName.equals("") && !projectTasks.equals("")) {
-                        UserProject userProjectToAdd = new UserProject(projectName, projectTasks, user_id);
-                        userProjectViewModel.insert(userProjectToAdd);
-                        Toast.makeText(getActivity(), "Your Project Has Been Added", Toast.LENGTH_LONG).show();
+                        DatabaseReference projRef = FirebaseDatabase.getInstance().getReference().child("users")
+                                .child(user_id).child("projects").push();
+                        final UserProject userProjectToAdd = new UserProject(projRef.getKey(),projectName, projectTasks, user_id);
+                        projRef.setValue(userProjectToAdd).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                userProjectViewModel.insert(userProjectToAdd);
+                                Toast.makeText(getActivity(), "Your Project Has Been Added", Toast.LENGTH_LONG).show();
+                                Navigation.findNavController(v).navigateUp();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     } else {
                         Toast.makeText(getActivity(), "All Fields Need To Be Filled", Toast.LENGTH_SHORT).show();
                     }

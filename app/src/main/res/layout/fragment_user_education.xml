@@ -33,6 +33,19 @@
         android:textSize="18dp"
         android:text="Please Add 3 To 4 Courses To Get The Best CV Design"/>
 
+    <TextView
+        android:id="@+id/usereducation_note"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/usereducation_description"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="Swipe Left To Delete | Right To Update"
+        android:textAlignment="center"
+        android:textSize="12dp"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/usereducation_recyclerView"
         android:layout_width="match_parent"
@@ -44,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/usereducation_description"
+        app:layout_constraintTop_toBottomOf="@id/usereducation_note"
         />
 
     <LinearLayout

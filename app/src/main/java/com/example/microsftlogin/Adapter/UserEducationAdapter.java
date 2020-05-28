@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
@@ -16,6 +17,13 @@ import com.example.microsftlogin.R;
 import com.example.microsftlogin.UserEducationDatabase.UserEducation;
 import com.example.microsftlogin.UserEducationDatabase.UserEducationViewModel;
 import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -64,7 +72,7 @@ public class UserEducationAdapter extends RecyclerView.Adapter<UserEducationAdap
                    Bundle args = new Bundle();
                    args.putInt("ActionToPerform",2);
                    args.putInt("UserEducationPosition",getAdapterPosition());
-                   args.putInt("UserEducationId",userEducationList.get(getAdapterPosition()).getId());
+                   args.putString("UserEducationId",userEducationList.get(getAdapterPosition()).getId());
                    args.putString("CourseName",userEducationList.get(getAdapterPosition()).getCourseName());
                    args.putString("SchoolName",userEducationList.get(getAdapterPosition()).getSchoolOrWebsite());
                    args.putString("StudiedFrom",userEducationList.get(getAdapterPosition()).getStudiedFrom());
@@ -76,15 +84,30 @@ public class UserEducationAdapter extends RecyclerView.Adapter<UserEducationAdap
 
                case R.id.deleteuserexperience_btn :
                    UserEducation currentEducation = getUserEducationAt(getAdapterPosition());
-                   UserEducation userEducationToDelete = new UserEducation(currentEducation.getId(),
+                   final UserEducation userEducationToDelete = new UserEducation(currentEducation.getId(),
                            currentEducation.getCourseName(),currentEducation.getSchoolOrWebsite(),
                            currentEducation.getStudiedFrom(),currentEducation.getStudiedTill(),currentEducation.getCityOrCountry()
                            ,currentEducation.getSubcoursesOrTasks(),currentEducation.getUserId());
 
                    if (currentEducation != null) {
-                       userEducationViewModel.delete(userEducationToDelete);
-                       userEducationList.remove(getAdapterPosition());
-                       notifyDataSetChanged();
+                       FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
+                       DatabaseReference eduRef = FirebaseDatabase.getInstance().getReference().child("users")
+                               .child(currentuser.getUid()).child("educations").child(userEducationToDelete.getId());
+                       eduRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                           @Override
+                           public void onComplete(@NonNull Task<Void> task) {
+                               if (task.isSuccessful()) {
+                                   userEducationViewModel.delete(userEducationToDelete);
+                                   userEducationList.remove(getAdapterPosition());
+                                   notifyDataSetChanged();
+                               }
+                           }
+                       }).addOnFailureListener(new OnFailureListener() {
+                           @Override
+                           public void onFailure(@NonNull Exception e) {
+                               Toast.makeText(mInflater.getContext(), "Something Went Wrong Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                           }
+                       });
                    }
 
                break;

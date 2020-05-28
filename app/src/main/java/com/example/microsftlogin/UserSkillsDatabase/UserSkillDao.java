@@ -20,4 +20,7 @@ public interface UserSkillDao {
 
     @Delete
     void delete(UserSkill userSkill);
+
+    @Query("DELETE from user_skill_table")
+        void deleteAllUserSkill();
 }

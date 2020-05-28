@@ -8,8 +8,10 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "user_education_table")
 public class UserEducation {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+
+    @NonNull
+    @PrimaryKey
+    private String id;
 
     @NonNull
     @ColumnInfo(name = "course_name")
@@ -37,22 +39,10 @@ public class UserEducation {
 
     @NonNull
     @ColumnInfo(name = "educationuser_id")
-    private int userId;
+    private String userId;
 
-    public UserEducation(String mCourseName, String mSchoolOrWebsite, String mStudiedFrom, String mStudiedTill, String mCityOrCountry,
-                  String mSubcoursesOrTasks,int userId) {
-        this.mCourseName = mCourseName;
-        this.mSchoolOrWebsite = mSchoolOrWebsite;
-        this.mStudiedFrom = mStudiedFrom;
-        this.mStudiedTill = mStudiedTill;
-        this.mCityOrCountry = mCityOrCountry;
-        this.mSubcoursesOrTasks = mSubcoursesOrTasks;
-        this.userId = userId;
-    }
-
-    @Ignore
-   public UserEducation(int id,String mCourseName, String mSchoolOrWebsite, String mStudiedFrom, String mStudiedTill, String mCityOrCountry,
-                  String mSubcoursesOrTasks,int userId) {
+   public UserEducation(String id,String mCourseName, String mSchoolOrWebsite, String mStudiedFrom, String mStudiedTill, String mCityOrCountry,
+                  String mSubcoursesOrTasks,String userId) {
         this.id = id;
         this.mCourseName = mCourseName;
         this.mSchoolOrWebsite = mSchoolOrWebsite;
@@ -63,11 +53,17 @@ public class UserEducation {
         this.userId = userId;
     }
 
-    public int getId() {
+    @Ignore
+    public UserEducation() {
+       //For Datasnapshots
+    }
+
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -125,11 +121,12 @@ public class UserEducation {
         this.mSubcoursesOrTasks = mSubcoursesOrTasks;
     }
 
-    public int getUserId() {
+    @NonNull
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(@NonNull String userId) {
         this.userId = userId;
     }
 }

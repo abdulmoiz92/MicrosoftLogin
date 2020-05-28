@@ -1,15 +1,21 @@
 package com.example.microsftlogin.EditCvFragements;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +25,14 @@ import com.example.microsftlogin.UserDatabase.UserViewModel;
 import com.example.microsftlogin.UserEducationDatabase.UserEducation;
 import com.example.microsftlogin.UserEducationDatabase.UserEducationViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +50,8 @@ public class AddUserEducation extends Fragment {
     private TextInputLayout addusereducationSchoolAddress;
     private TextInputLayout addusereducationSubCourses;
     private Button addusereducationSubmitbtn;
+    private ProgressBar addusereducationProgress;
+    private Boolean connected = false;
     private UserViewModel userViewModel;
 
     private List<UserEducation> userEducationList = new ArrayList<>();
@@ -52,7 +67,7 @@ public class AddUserEducation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_user_education, container, false);
+        final View view = inflater.inflate(R.layout.fragment_add_user_education, container, false);
         addusereducationCourseName = view.findViewById(R.id.addusereducation_coursename);
         addusereducationSchool = view.findViewById(R.id.addusereducation_school);
         addusereducationStudiedFrombtn = view.findViewById(R.id.addusereducation_learnedfrom);
@@ -62,6 +77,7 @@ public class AddUserEducation extends Fragment {
         addusereducationSchoolAddress = view.findViewById(R.id.addusereducation_schoolAddress);
         addusereducationSubCourses = view.findViewById(R.id.addusereducation_description);
         addusereducationSubmitbtn = view.findViewById(R.id.addusereducation_submit);
+        addusereducationProgress = view.findViewById(R.id.addusereducation_progress);
 
         int userEducationIdReceived;
 
@@ -104,44 +120,95 @@ public class AddUserEducation extends Fragment {
         addusereducationSubmitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int actionToPerform = 0;
-                if (getArguments() != null) {
-                    actionToPerform = getArguments().getInt("ActionToPerform");
+                ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                    //we are connected to a network
+                    connected = true;
+                } else {
+                    connected = false;
                 }
-                String courseName = addusereducationCourseName.getEditText().getText().toString();
-                String schoolName = addusereducationSchool.getEditText().getText().toString();
-                String studiedFrom = addusereducationStudiedFromDate.getText().toString();
-                String studiedTill = addusereducationStudiedTillDate.getText().toString();
-                String schoolAddress = addusereducationSchoolAddress.getEditText().getText().toString();
-                String subCourses = addusereducationSubCourses.getEditText().getText().toString();
 
-                int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
-
-                if (actionToPerform == 2) {
-                    if (!courseName.equals("") && !schoolName.equals("") && !studiedFrom.equals("") &&
-                            !studiedFrom.equals("") && !schoolAddress.equals("") && !subCourses.equals("")) {
-                        final int userEducationIdReceived = getArguments().getInt("UserEducationId");
-
-                        UserEducation userEducationToBeUpdated = new UserEducation(userEducationIdReceived,courseName,schoolName
-                        ,studiedFrom,studiedTill,schoolAddress,subCourses,user_id);
-                        userEducationViewModel.update(userEducationToBeUpdated);
-                        Toast.makeText(getActivity(),"Your Education Is Been Updated",Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getActivity(),"All Fields Need To Be Filled",Toast.LENGTH_LONG).show();
+                if (connected == true) {
+                    addusereducationSubmitbtn.setVisibility(View.GONE);
+                    addusereducationProgress.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.main_background),
+                            android.graphics.PorterDuff.Mode.SRC_ATOP);
+                    addusereducationProgress.setVisibility(View.VISIBLE);
+                    int actionToPerform = 0;
+                    if (getArguments() != null) {
+                        actionToPerform = getArguments().getInt("ActionToPerform");
                     }
-                }
-                else {
-                    if (!courseName.equals("") && !schoolName.equals("") && !studiedFrom.equals("") &&
-                            !studiedFrom.equals("") && !schoolAddress.equals("") && !subCourses.equals("")) {
-                        UserEducation newUserEducation = new UserEducation(courseName, schoolName, studiedFrom, studiedTill,
-                                schoolAddress, subCourses, user_id);
+                    String courseName = addusereducationCourseName.getEditText().getText().toString();
+                    String schoolName = addusereducationSchool.getEditText().getText().toString();
+                    String studiedFrom = addusereducationStudiedFromDate.getText().toString();
+                    String studiedTill = addusereducationStudiedTillDate.getText().toString();
+                    String schoolAddress = addusereducationSchoolAddress.getEditText().getText().toString();
+                    String subCourses = addusereducationSubCourses.getEditText().getText().toString();
 
-                        userEducationViewModel.insert(newUserEducation);
+                    String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                        Toast.makeText(getActivity(), "Your Education Has Been Added", Toast.LENGTH_LONG).show();
+
+                    if (actionToPerform == 2) {
+                        if (!courseName.equals("") && !schoolName.equals("") && !studiedFrom.equals("") &&
+                                !studiedFrom.equals("") && !schoolAddress.equals("") && !subCourses.equals("")) {
+                            final String userEducationIdReceived = getArguments().getString("UserEducationId");
+                            DatabaseReference refEduUpdate = FirebaseDatabase.getInstance().getReference().child("users").
+                                    child(user_id).child("educations");
+                            final UserEducation userEducationToBeUpdated = new UserEducation(userEducationIdReceived, courseName, schoolName
+                                    , studiedFrom, studiedTill, schoolAddress, subCourses, user_id);
+                            refEduUpdate.child(userEducationIdReceived).setValue(userEducationToBeUpdated).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        userEducationViewModel.update(userEducationToBeUpdated);
+                                        Toast.makeText(getActivity(), "Your Education Is Been Updated", Toast.LENGTH_LONG).show();
+                                        Navigation.findNavController(view).navigateUp();
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    addusereducationSubmitbtn.setVisibility(View.VISIBLE);
+                                    addusereducationProgress.setVisibility(View.GONE);
+                                    Toast.makeText(getActivity(), "Something Went Wrong Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            addusereducationSubmitbtn.setVisibility(View.VISIBLE);
+                            addusereducationProgress.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "All Fields Need To Be Filled", Toast.LENGTH_LONG).show();
+                        }
                     } else {
-                        Toast.makeText(getActivity(), "All Fields To Be Filled", Toast.LENGTH_LONG).show();
+                        if (!courseName.equals("") && !schoolName.equals("") && !studiedFrom.equals("") &&
+                                !studiedFrom.equals("") && !schoolAddress.equals("") && !subCourses.equals("")) {
+                            DatabaseReference refEdu = FirebaseDatabase.getInstance().getReference().child("users").
+                                    child(user_id).child("educations").push();
+                            final UserEducation newUserEducation = new UserEducation(refEdu.getKey(), courseName, schoolName, studiedFrom, studiedTill,
+                                    schoolAddress, subCourses, user_id);
+                            refEdu.setValue(newUserEducation).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        userEducationViewModel.insert(newUserEducation);
+                                        Toast.makeText(getActivity(), "Your Education Has Been Added", Toast.LENGTH_LONG).show();
+                                        Navigation.findNavController(view).navigateUp();
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    addusereducationSubmitbtn.setVisibility(View.VISIBLE);
+                                    addusereducationProgress.setVisibility(View.GONE);
+                                    Toast.makeText(getActivity(), "Something Went Wrong Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        } else {
+                            Toast.makeText(getActivity(), "All Fields To Be Filled", Toast.LENGTH_LONG).show();
+                        }
                     }
+                } else {
+                    Toast.makeText(getActivity(), "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -3,6 +3,7 @@ package com.example.microsftlogin.UserDatabase;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -29,7 +30,7 @@ public interface UserDao {
     @Query("SELECT * from user_table LIMIT 1")
     User[] getAnyUser();
 
-    @Query("SELECT * FROM user_table WHERE user_email =:userEmail")
+    @Query("SELECT * FROM user_table WHERE id =:userEmail")
     List<User> find(String userEmail);
 
     @Query("SELECT * FROM user_table WHERE id = :userId")
@@ -41,7 +42,10 @@ public interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM user_table WHERE id = :userId")
-    List<UserWithAbout> findUserWithAbout(int userId);
+    List<UserWithAbout> findUserWithAbout(String userId);
+
+    @Query("DELETE FROM user_table")
+    void deleteAllUser();
 
     @Transaction
     @Query("SELECT * FROM user_table")
@@ -49,7 +53,7 @@ public interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM user_table WHERE id = :userId")
-    List<UserWithExperience> findUserWithExperience(int userId);
+    List<UserWithExperience> findUserWithExperience(String userId);
 
     @Transaction
     @Query("SELECT * FROM user_table")
@@ -57,7 +61,7 @@ public interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM user_table WHERE id = :userId")
-    List<UserWithEducation> findUserWithEducation(int userId);
+    List<UserWithEducation> findUserWithEducation(String userId);
 
     @Transaction
     @Query("SELECT * FROM user_table")
@@ -65,7 +69,7 @@ public interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM user_table WHERE id = :userId")
-    List<UserWithSkill> findUserWithSkill(int userId);
+    List<UserWithSkill> findUserWithSkill(String userId);
 
     @Transaction
     @Query("SELECT * FROM user_table")
@@ -73,7 +77,7 @@ public interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM user_table WHERE id = :userId")
-    List<UserWithProject> findUserWithProject(int userId);
+    List<UserWithProject> findUserWithProject(String userId);
 
     @Transaction
     @Query("SELECT * FROM user_table")
@@ -81,6 +85,6 @@ public interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM user_table WHERE id = :userId")
-    List<UserWithAchievement> findUserWithAchievement(int userId);
+    List<UserWithAchievement> findUserWithAchievement(String userId);
 
 }

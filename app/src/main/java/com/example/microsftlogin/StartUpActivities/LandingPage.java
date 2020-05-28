@@ -27,6 +27,7 @@ public class LandingPage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent loginintent = new Intent(LandingPage.this,MainActivity.class);
                 startActivity(loginintent);
+                finish();
             }
         });
 
@@ -36,6 +37,7 @@ public class LandingPage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent signupintent = new Intent(LandingPage.this,Register.class);
                 startActivity(signupintent);
+                finish();
             }
         });
     }

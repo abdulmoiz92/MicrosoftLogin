@@ -21,7 +21,15 @@ import com.example.microsftlogin.UserAchievementsDatabase.UserAchievement;
 import com.example.microsftlogin.UserAchievementsDatabase.UserAchievementViewModel;
 import com.example.microsftlogin.UserDatabase.UserViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -49,7 +57,7 @@ public class UserAchievements extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_achievements, container, false);
 
-        final int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+        final String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         addUserAchievementName = view.findViewById(R.id.adduserachievements_achievementname);
         addUserAchievementDescription = view.findViewById(R.id.adduserachievements_description);
@@ -64,22 +72,38 @@ public class UserAchievements extends Fragment {
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
+        final FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
 
         addUserAchievementSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!addUserAchievementName.getEditText().getText().toString().equals("") &&
                         !addUserAchievementDescription.getEditText().getText().toString().equals("")) {
-                    UserAchievement userAchievementToAdd = new UserAchievement(
+                    DatabaseReference achRef = FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(currentuser.getUid()).child("achievements").push();
+                    final UserAchievement userAchievementToAdd = new UserAchievement(achRef.getKey(),
                             addUserAchievementName.getEditText().getText().toString(),
                             addUserAchievementDescription.getEditText().getText().toString(),user_id);
+                    achRef.setValue(userAchievementToAdd).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                userAchievementViewModel.insert(userAchievementToAdd);
+                                mAdapter.addAchievement(userAchievementToAdd);
+                                addUserAchievementName.getEditText().setText("");
+                                addUserAchievementDescription.getEditText().setText("");
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(),"Something Went Wrong",Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                    userAchievementViewModel.insert(userAchievementToAdd);
-                    mAdapter.addAchievement(userAchievementToAdd);
-                    addUserAchievementName.getEditText().setText("");
-                    addUserAchievementDescription.getEditText().setText("");
+
                 } else {
-                    Toast.makeText(getActivity(),"All Fields Need To Be FIlled",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"All Fields Need To Be Filled",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -93,10 +117,22 @@ public class UserAchievements extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-                UserAchievement userAchievementToDelete = mAdapter.getUserAchievementAt(position);
-                userAchievementViewModel.delete(userAchievementToDelete);
-                mAdapter.deleteAchievement(position);
+                final int position = viewHolder.getAdapterPosition();
+                final UserAchievement userAchievementToDelete = mAdapter.getUserAchievementAt(position);
+                DatabaseReference achRef = FirebaseDatabase.getInstance().getReference().child("users")
+                        .child(currentuser.getUid()).child("achievements").child(userAchievementToDelete.getId());
+                achRef.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        userAchievementViewModel.delete(userAchievementToDelete);
+                        mAdapter.deleteAchievement(position);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(),"Something Went Wrong",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 

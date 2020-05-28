@@ -9,6 +9,7 @@ import android.graphics.text.LineBreaker;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -43,6 +44,7 @@ import com.example.microsftlogin.UserExperienceDatabase.UserExperience;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
 import com.example.microsftlogin.dashboardsActivities.EditTodoFragmentDirections;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -215,8 +217,19 @@ public class Dashboard extends Fragment implements View.OnClickListener {
                 .show();
     }
 
-    private void createPdf() throws FileNotFoundException,DocumentException {
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    /* private void createPdf() throws FileNotFoundException,DocumentException {
         int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+        String user_id2 = FirebaseAuth.getInstance().getCurrentUser().getUid();
         UserViewModel userViewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
         AboutUser aboutUser = null;
 
@@ -232,8 +245,8 @@ public class Dashboard extends Fragment implements View.OnClickListener {
         PdfWriter.getInstance(document, output);
 
         document.open();
-        if (userViewModel.findUserWithAbout(user_id).get(0).getAboutUserList().size() > 0) {
-            aboutUser = userViewModel.findUserWithAbout(user_id).get(0).getAboutUser();
+        if (userViewModel.findUserWithAbout(user_id2).get(0).getAboutUserList().size() > 0) {
+            aboutUser = userViewModel.findUserWithAbout(user_id2).get(0).getAboutUser();
             document.add(new Paragraph("Name: " + aboutUser.getName() + "\n"));
             document.add(new Paragraph("Email: " + aboutUser.getEmail()));
             document.add(new Paragraph("Phone: " + aboutUser.getPhone()));
@@ -264,6 +277,5 @@ public class Dashboard extends Fragment implements View.OnClickListener {
                 document.add(Chunk.NEWLINE);
             }
         }
-        document.close();
-    }
+        document.close(); */
 }

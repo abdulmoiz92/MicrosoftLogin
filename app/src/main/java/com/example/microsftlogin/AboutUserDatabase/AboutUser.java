@@ -10,126 +10,121 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "about_user_table")
 public class AboutUser {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @NonNull
+    @PrimaryKey
+    private String id;
 
     @NonNull
     @ColumnInfo(name = "aboutuser_name")
-    private String mName;
+    private String name;
 
     @NonNull
     @ColumnInfo(name = "aboutuser_email")
-    private String mEmail;
+    private String email;
 
     @NonNull
     @ColumnInfo(name = "aboutuser_phone")
-    private String mPhone;
+    private String phone;
 
     @Nullable
     @ColumnInfo(name = "aboutuser_address")
-    private String mAddress;
+    private String address;
 
     @Nullable
     @ColumnInfo(name = "aboutuser_education")
-    private String mEducationDegree;
+    private String educationDegree;
 
     @Nullable
     @ColumnInfo(name = "aboutuser_description")
-    private String mDescription;
+    private String description;
 
-    @Nullable
+    @NonNull
     @ColumnInfo(name = "aboutuser_id")
-    private int userId;
+    private String userId;
 
-    public AboutUser(String mName, String mEmail, String mPhone, String mAddress, String mEducationDegree,
-                     String mDescription, int userId) {
-        this.mName = mName;
-        this.mEmail = mEmail;
-        this.mPhone = mPhone;
-        this.mAddress = mAddress;
-        this.mEducationDegree = mEducationDegree;
-        this.mDescription = mDescription;
+
+    public AboutUser(String id, String name, String email, String phone, String address, String educationDegree,
+                     String description, String userId) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.educationDegree = educationDegree;
+        this.description = description;
         this.userId = userId;
     }
 
     @Ignore
-    public AboutUser(int id,String mName, String mEmail, String mPhone, String mAddress, String mEducationDegree,
-                     String mDescription, int userId) {
-        this.id = id;
-        this.mName = mName;
-        this.mEmail = mEmail;
-        this.mPhone = mPhone;
-        this.mAddress = mAddress;
-        this.mEducationDegree = mEducationDegree;
-        this.mDescription = mDescription;
-        this.userId = userId;
+    public AboutUser() {
+        //For Datasnapshots
     }
 
-
-    public int getId() {
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
     @NonNull
     public String getName() {
-        return mName;
+        return name;
     }
 
-    public void setName(@NonNull String mName) {
-        this.mName = mName;
+    public void setName(@NonNull String name) {
+        this.name = name;
     }
 
     @NonNull
     public String getEmail() {
-        return mEmail;
+        return email;
     }
 
-    public void setEmail(@NonNull String mEmail) {
-        this.mEmail = mEmail;
+    public void setEmail(@NonNull String email) {
+        this.email = email;
     }
 
     @NonNull
     public String getPhone() {
-        return mPhone;
+        return phone;
     }
 
-    public void setPhone(@NonNull String mPhone) {
-        this.mPhone = mPhone;
+    public void setPhone(@NonNull String phone) {
+        this.phone = phone;
     }
 
     public String getAddress() {
-        return mAddress;
+        return address;
     }
 
-    public void setAddress(String mAddress) {
-        this.mAddress = mAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getEducationDegree() {
-        return mEducationDegree;
+        return educationDegree;
     }
 
-    public void setEducationDegree(String mEducationDegree) {
-        this.mEducationDegree = mEducationDegree;
+    public void setEducationDegree(String educationDegree) {
+        this.educationDegree = educationDegree;
     }
 
     public String getDescription() {
-        return mDescription;
+        return description;
     }
 
-    public void setDescription(String mDescription) {
-        this.mDescription = mDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 }

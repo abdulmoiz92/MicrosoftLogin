@@ -23,4 +23,6 @@ public class AboutUserViewModel extends AndroidViewModel {
     public void insert(AboutUser aboutUser) { aboutUserRepository.insert(aboutUser); }
 
     public void update(AboutUser aboutUser) { aboutUserRepository.update(aboutUser); }
+
+    public void deleteAllAboutUser() { aboutUserRepository.deleteAllAboutUser(); }
 }

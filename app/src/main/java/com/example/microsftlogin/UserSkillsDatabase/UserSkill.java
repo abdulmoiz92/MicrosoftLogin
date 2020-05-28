@@ -8,8 +8,10 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "user_skill_table")
 public class UserSkill {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+
+    @NonNull
+    @PrimaryKey
+    private String id;
 
     @NonNull
     @ColumnInfo(name = "skill_name")
@@ -17,25 +19,25 @@ public class UserSkill {
 
     @NonNull
     @ColumnInfo(name = "skilluser_id")
-    private int userId;
+    private String userId;
 
-    public UserSkill(String mSkillName, int userId) {
-        this.mSkillName = mSkillName;
-        this.userId = userId;
-    }
-
-    @Ignore
-    public UserSkill(int id, String mSkillName, int userId) {
+    public UserSkill(String id, String mSkillName, String userId) {
         this.id = id;
         this.mSkillName = mSkillName;
         this.userId = userId;
     }
 
-    public int getId() {
+    @Ignore
+    public UserSkill() {
+        //For Datasnapshots
+    }
+
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -48,11 +50,12 @@ public class UserSkill {
         this.mSkillName = mSkillName;
     }
 
-    public int getUserId() {
+    @NonNull
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(@NonNull String userId) {
         this.userId = userId;
     }
 }

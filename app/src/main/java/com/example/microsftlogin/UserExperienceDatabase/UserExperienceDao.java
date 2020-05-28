@@ -23,4 +23,7 @@ public interface UserExperienceDao {
 
     @Delete
     void delete(UserExperience userExperience);
+
+    @Query("DELETE from user_experience_table")
+    void deleteAllUserExperience();
 }

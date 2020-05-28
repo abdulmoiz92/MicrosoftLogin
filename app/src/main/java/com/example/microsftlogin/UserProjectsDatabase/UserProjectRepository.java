@@ -27,6 +27,8 @@ public class UserProjectRepository {
 
     public void delete(UserProject userProject) { new deleteAsyncTask(userProjectDao).execute(userProject); }
 
+    public void deleteAllUserProjects() { new deleteAllAsyncTask(userProjectDao).execute(); }
+
     private static class insertAsyncTask extends AsyncTask<UserProject, Void, Void> {
         private UserProjectDao mAsyncTaskDao;
 
@@ -60,6 +62,18 @@ public class UserProjectRepository {
         @Override
         protected Void doInBackground(UserProject... params) {
             mAsyncTaskDao.delete(params[0]);
+            return null;
+        }
+    }
+
+    private static class deleteAllAsyncTask extends AsyncTask<Void,Void,Void> {
+        private UserProjectDao mAsyncTaskDao;
+
+        deleteAllAsyncTask(UserProjectDao userProjectDao) { this.mAsyncTaskDao = userProjectDao; }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAllUserProjects();
             return null;
         }
     }

@@ -23,4 +23,6 @@ public class UserSkillViewModel extends AndroidViewModel {
     public void insert(UserSkill userSkill) { userSkillRepository.insert(userSkill); }
 
     public void delete(UserSkill userSkill) { userSkillRepository.delete(userSkill); }
+
+    public void deleteAllUserSkill() { userSkillRepository.deleteAllUserSkill(); }
 }

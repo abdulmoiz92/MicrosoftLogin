@@ -5,19 +5,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.microsftlogin.AboutUserDatabase.AboutUser;
 import com.example.microsftlogin.Helpers.SharedPrefrenceHelper;
 import com.example.microsftlogin.HomePage;
 import com.example.microsftlogin.R;
 import com.example.microsftlogin.UserDatabase.User;
 import com.example.microsftlogin.UserDatabase.UserViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +53,9 @@ public class Register extends AppCompatActivity {
     private UserViewModel userViewModel;
     List<User> allUsers = new ArrayList<>();
     List<User> findUsers = new ArrayList<>();
+    Boolean connected = false;
+    Button register_btn;
+    ProgressBar register_progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +67,8 @@ public class Register extends AppCompatActivity {
         register_password = findViewById(R.id.register_password);
         register_confirm_password = findViewById(R.id.register_confirm_password);
         error_message = findViewById(R.id.error_message);
+        register_btn = findViewById(R.id.register_btn);
+        register_progress = findViewById(R.id.register_progress);
 
         if (!SharedPrefrenceUtil.getInstance(getApplicationContext()).getBooleanValue(IS_FIRST_TIME_LAUNCH)) {
             Intent splashScreen = new Intent(this, SplashScreen.class);
@@ -84,17 +104,21 @@ public class Register extends AppCompatActivity {
     }
 
     public void direct_to_login(View view) {
-        String name = register_name.getEditText().getText().toString();
-        String email = register_email.getEditText().getText().toString();
-        String password = register_password.getEditText().getText().toString();
+        final String name = register_name.getEditText().getText().toString();
+        final String email = register_email.getEditText().getText().toString();
+        final String password = register_password.getEditText().getText().toString();
         String confirm_password = register_confirm_password.getEditText().getText().toString();
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
+        register_btn.setVisibility(View.GONE);
+        register_progress.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.main_background),
+                android.graphics.PorterDuff.Mode.SRC_ATOP);
+        register_progress.setVisibility(View.VISIBLE);
 
-        if (allUsers.size() < 1) {
+       /* if (allUsers.size() < 1) { */
 
             if (!name.isEmpty() && mat.matches() && !password.isEmpty() && password.equals(confirm_password)) {
-                Intent register_intent = new Intent(Register.this, MainActivity.class);
+               /* Intent register_intent = new Intent(Register.this, MainActivity.class);
                 register_intent.putExtra("email", email);
                 register_intent.putExtra("password", password);
                 //register_intent.putExtra(Email_Key,mprefrences.getString(Email_Key,""));
@@ -102,29 +126,31 @@ public class Register extends AppCompatActivity {
                 User newUser = new User(name, email, password);
                 userViewModel.insert(newUser);
                 Toast.makeText(this, "Registered Successfully", Toast.LENGTH_LONG).show();
-                startActivity(register_intent);
+                startActivity(register_intent); */
                 // setResult(RESULT_OK, register_intent);
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                    //we are connected to a network
+                    connected = true;
+                }
+                else {
+                    connected = false;
+                }
+                if (connected == true) {
+                    registerNewEmail(name, email, password);
+                } else {
+                    register_btn.setVisibility(View.VISIBLE);
+                    register_progress.setVisibility(View.GONE);
+                    Toast.makeText(this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                }
 
 
-           /* SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(USER_NAME, name);
-            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(USER_EMAIL, email);
-            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(USER_PASSWORD, password); */
             } else {
                 error_message.setVisibility(view.VISIBLE);
             }
 
-        } else {
-            /*
-                boolean verifyEmail = false;
-
-               if (findUsers.size() > 0) {
-                   for (int i =0; i<=findUsers.size() -1; i++) {
-                       if (allUsers.get(i).getEmail().equals(email)) {
-                           verifyEmail = true;
-                           break;
-                       }
-                   }
-               } */
+        } /* else {
 
             boolean verifyEmail = false;
             List<User> usersFound = new ArrayList<>();
@@ -145,21 +171,73 @@ public class Register extends AppCompatActivity {
                     // setResult(RESULT_OK, register_intent);
                 }
 
-           /* SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(USER_NAME, name);
-            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(USER_EMAIL, email);
-            SharedPrefrenceUtil.getInstance(getApplicationContext()).saveValue(USER_PASSWORD, password); */
              else if (verifyEmail) {
                 Toast.makeText(this, "Email Already Registered", Toast.LENGTH_LONG).show();
             } else {
                 error_message.setVisibility(view.VISIBLE);
             }
 
-        }
-    }
+        } */
+    //}
 
     public void already_have_account(View view) {
          Intent loginIntent = new Intent(Register.this,MainActivity.class);
          startActivity(loginIntent);
+         finish();
+    }
+
+    private void registerNewEmail(final String name, final String email, final String password) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                    final FirebaseUser newUser = FirebaseAuth.getInstance().getCurrentUser();
+                    final User user = new User(newUser.getUid(),name,email,password);
+
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users").child(newUser.getUid()).child("userinfo").push()
+                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                DatabaseReference aboutUserRef = FirebaseDatabase.getInstance().getReference().child("users")
+                                        .child(newUser.getUid()).child("about").push();
+
+                                AboutUser aboutUser = new AboutUser(aboutUserRef.getKey(),user.getName(),user.getEmail(),"","","","",
+                                        user.getId());
+                                FirebaseAuth.getInstance().signOut();
+                                aboutUserRef.setValue(aboutUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Intent register_intent = new Intent(Register.this, MainActivity.class);
+                                        register_intent.putExtra("email", email);
+                                        register_intent.putExtra("password", password);
+                                        startActivity(register_intent);
+                                        finish();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        FirebaseAuth.getInstance().signOut();
+                                        Toast.makeText(Register.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            FirebaseAuth.getInstance().signOut();
+                            Toast.makeText(Register.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(Register.this, "Email Already Registered", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

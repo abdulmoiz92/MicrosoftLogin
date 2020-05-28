@@ -18,4 +18,7 @@ public interface UserAchievementDao {
 
     @Delete
     void delete(UserAchievement userAchievement);
+
+    @Query("DELETE from user_achievement_table")
+    void deleteAllUserAchievements();
 }

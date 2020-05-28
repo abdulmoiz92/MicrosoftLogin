@@ -27,6 +27,8 @@ public class UserExperienceRepository {
 
     public void delete(UserExperience userExperience) { new deleteAsyncTask(userExperienceDao).execute(userExperience); }
 
+    public void deleteAllUserExperience() { new deleteAllAysncTask(userExperienceDao).execute(); }
+
     private static class insertAsyncTask extends AsyncTask<UserExperience,Void,Void> {
         private UserExperienceDao mAsyncTaskDao;
 
@@ -60,6 +62,18 @@ public class UserExperienceRepository {
         @Override
         protected Void doInBackground(UserExperience... params) {
             mAsyncTaskDao.delete(params[0]);
+            return null;
+        }
+    }
+
+    private static class deleteAllAysncTask extends AsyncTask<Void,Void,Void> {
+        private UserExperienceDao mAsyncTaskDao;
+
+        deleteAllAysncTask(UserExperienceDao userExperienceDao) { this.mAsyncTaskDao = userExperienceDao; }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAllUserExperience();
             return null;
         }
     }

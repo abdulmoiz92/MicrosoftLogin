@@ -9,69 +9,75 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "user_table")
 public class User {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @NonNull
+    @PrimaryKey
+    private String id;
 
     @NonNull
     @ColumnInfo(name = "user_email")
-    private String mEmail;
+    private String email;
 
     @NonNull
     @ColumnInfo(name = "user_name")
-    private String mName;
+    private String name;
 
     @NonNull
     @ColumnInfo(name = "user_password")
-    private String mPassword;
+    private String password;
 
-    public User(@NonNull String name,@NonNull String email,@NonNull String password) {
-        this.mName = name;
-        this.mEmail = email;
-        this.mPassword = password;
+   /* public User(@NonNull String name,@NonNull String email,@NonNull String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    } */
+
+    public User(String id,String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 
     @Ignore
-    public User(int id,String name, String email, String password) {
-        this.id = id;
-        this.mName = name;
-        this.mEmail = email;
-        this.mPassword = password;
+    public User() {
+        // For Datasnapshot
     }
 
     // Getters & Setters
 
     @NonNull
     public String getEmail() {
-        return mEmail;
+        return email;
     }
 
     public void setEmail(@NonNull String email) {
-        this.mEmail = email;
+        this.email = email;
     }
 
     @NonNull
     public String getPassword() {
-        return mPassword;
+        return password;
     }
 
     public void setPassword(@NonNull String password) {
-        this.mPassword = password;
+        this.password = password;
     }
 
     @NonNull
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(@NonNull String name) {
-        this.mName = name;
+        this.name = name;
     }
 
-    public int getId() {
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 }

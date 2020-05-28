@@ -22,4 +22,7 @@ public interface UserEducationDao {
 
     @Delete
     void delete(UserEducation userEducation);
+
+    @Query("DELETE from user_education_table")
+    void deleteAllUserEducation();
 }

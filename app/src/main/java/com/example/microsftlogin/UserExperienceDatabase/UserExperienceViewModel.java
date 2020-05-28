@@ -25,4 +25,6 @@ public class UserExperienceViewModel extends AndroidViewModel {
     public void update(UserExperience userExperience) { userExperienceRepository.update(userExperience); }
 
     public void delete(UserExperience userExperience) { userExperienceRepository.delete(userExperience); }
+
+    public void deleteAllUserExperience() { userExperienceRepository.deleteAllUserExperience(); }
 }

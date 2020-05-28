@@ -22,4 +22,7 @@ public interface UserProjectDao {
 
     @Delete
     void delete(UserProject userProject);
+
+    @Query("DELETE from user_project_table")
+    void deleteAllUserProjects();
 }

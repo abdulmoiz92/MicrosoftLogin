@@ -47,6 +47,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="300dp"
                     android:drawableStart="@drawable/ic_job_title_purple_24dp"
+                    android:drawablePadding="5dp"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="10dp"/>
 
@@ -68,6 +69,7 @@
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_company_purple_24dp"
+                    android:drawablePadding="5dp"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -137,7 +139,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_location_on_purple_24dp"/>
+                    android:drawableStart="@drawable/ic_location_on_purple_24dp"
+                    android:drawablePadding="5dp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -157,6 +160,7 @@
                     android:layout_width="300dp"
                     android:layout_height="100dp"
                     android:drawableStart="@drawable/ic_edit_purple_24dp"
+                    android:drawablePadding="5dp"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -183,6 +187,15 @@
                 android:textColor="#fff"
                 android:layout_marginBottom="20dp"
                 />
+
+            <ProgressBar
+                android:id="@+id/addusereducation_progress"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="20dp"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

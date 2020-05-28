@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.microsftlogin.Adapter.UserProjectAdapter;
 import com.example.microsftlogin.R;
@@ -21,7 +22,12 @@ import com.example.microsftlogin.UserDatabase.UserViewModel;
 import com.example.microsftlogin.UserProjectsDatabase.UserProject;
 import com.example.microsftlogin.UserProjectsDatabase.UserProjectViewModel;
 import com.example.microsftlogin.Utils.SharedPrefrenceUtil;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +43,7 @@ public class UserPersonalProjects extends Fragment {
     private RecyclerView mRecyclerView;
     private UserProjectAdapter mAdapter;
     private List<UserProject> userProjectList = new ArrayList<>();
-    int user_id = SharedPrefrenceUtil.getInstance(getActivity()).getIntValue(SharedPrefrenceUtil.CURRENT_USER_ID);
+    String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     public UserPersonalProjects() {
         // Required empty public constructor
@@ -77,15 +83,27 @@ public class UserPersonalProjects extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
+                final int position = viewHolder.getAdapterPosition();
                 if (direction == ItemTouchHelper.LEFT) {
-                    UserProject project = mAdapter.getProjectAt(position);
-                    userProjectViewModel.delete(project);
-                    mAdapter.deleteProject(position);
+                    final UserProject project = mAdapter.getProjectAt(position);
+                    DatabaseReference projRef = FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(user_id).child("projects").child(project.getId());
+                    projRef.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            userProjectViewModel.delete(project);
+                            mAdapter.deleteProject(position);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else if(direction == ItemTouchHelper.RIGHT) {
                     Bundle args = new Bundle();
                     args.putInt("ActionToPerform",2);
-                    args.putInt("ProjectUserId",userProjectList.get(position).getId());
+                    args.putString("ProjectUserId",userProjectList.get(position).getId());
                     args.putString("ProjectName",userProjectList.get(position).getProjectName());
                     args.putString("ProjectTasks",userProjectList.get(position).getProjectTasks());
                     Navigation.findNavController(getActivity(),R.id.fragment).navigate(R.id.addUserPersonalProjects,args);

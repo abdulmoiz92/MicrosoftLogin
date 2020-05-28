@@ -13,12 +13,12 @@
 
     <ImageView
         android:id="@+id/profileimage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         android:src="@drawable/avatar"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -26,93 +26,70 @@
         android:id="@+id/fieldsdiv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profileimage">
-    <TextView
-        android:id="@+id/namelabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name: "
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@id/editName"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edituser_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:hint="Full Name"
+            app:helperTextEnabled="true">
 
-    <EditText
-        android:id="@+id/editName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="75dp"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:text=""
-        android:hint="Enter Name"
-        android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@id/fieldsdiv"
-        app:layout_constraintLeft_toLeftOf="@id/namelabel"
-         />
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_person_purple_24dp"
+                android:drawablePadding="5dp" />
 
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/emaillabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email: "
-        app:layout_constraintTop_toBottomOf="@id/namelabel"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp"
-        app:layout_constraintBaseline_toBaselineOf="@id/editEmail"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edituser_email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/edituser_name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:hint="Email Address"
+            app:helperTextEnabled="true">
 
-    <EditText
-        android:id="@+id/editEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="75dp"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:hint="Enter Email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintLeft_toLeftOf="@id/namelabel"
-        app:layout_constraintTop_toBottomOf="@id/editName" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_email_purple_24dp"
+                android:drawablePadding="5dp" />
 
-    <TextView
-        android:id="@+id/passwordlabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="Password: "
-        app:layout_constraintBaseline_toBaselineOf="@+id/editPassword"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="75dp"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:hint="Enter Password"
-        android:inputType="textPassword"
-        app:layout_constraintLeft_toLeftOf="@id/passwordlabel"
-        app:layout_constraintTop_toBottomOf="@id/editEmail" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edituser_password"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            style="@style/EditTextStyle"
+            app:layout_constraintTop_toBottomOf="@id/edituser_email"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:passwordToggleEnabled="true"
+            android:hint="Confirm Password">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                />
 
-    <EditText
-        android:id="@+id/editPasswordConfirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:hint="Confirm Your Password"
-        android:inputType="textPassword"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -123,11 +100,66 @@
         android:text="Update Profile"
         android:padding="8dp"
         android:layout_marginTop="30dp"
-        android:background="#0D1C30"
+        android:background="#7E00FD"
         android:textColor="#fff"
         app:layout_constraintTop_toBottomOf="@id/fieldsdiv"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         />
+
+    <TextView
+        android:id="@+id/edit_passwordreset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/updateProfile"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="20dp"
+        android:textColor="#AB3FFF"
+        android:textSize="15dp"
+        android:text="Change Password"/>
+
+    <TextView
+        android:id="@+id/edit_deleteaccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/edit_changepassword_progress"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="0dp"
+        android:textColor="#AB3FFF"
+        android:textSize="15dp"
+        android:text="Delete Account"/>
+
+    <ProgressBar
+        android:id="@+id/edit_updateprofile_progress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/fieldsdiv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="invisible"/>
+
+    <ProgressBar
+        android:id="@+id/edit_changepassword_progress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/updateProfile"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="invisible"/>
+
+    <ProgressBar
+        android:id="@+id/edit_deleteaccount_progress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/edit_passwordreset"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="invisible"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

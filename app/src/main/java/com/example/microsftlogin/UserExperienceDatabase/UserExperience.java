@@ -9,8 +9,10 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "user_experience_table")
 public class UserExperience {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+
+    @NonNull
+    @PrimaryKey
+    private String id;
 
     @NonNull
     @ColumnInfo(name = "job_title")
@@ -38,22 +40,11 @@ public class UserExperience {
 
     @NonNull
     @ColumnInfo(name = "experienceuser_id")
-    private int userId;
+    private String userId;
 
-    public UserExperience(String mJobTitle, String mCompanyName, String mWorkedFrom, String mWorkedTill,
-                          String mCityOrCountry, String mTasksPerformed, int userId) {
-        this.mJobTitle = mJobTitle;
-        this.mCompanyName = mCompanyName;
-        this.mWorkedFrom = mWorkedFrom;
-        this.mWorkedTill = mWorkedTill;
-        this.mCityOrCountry = mCityOrCountry;
-        this.mTasksPerformed = mTasksPerformed;
-        this.userId = userId;
-    }
 
-    @Ignore
-    public UserExperience(int id, String mJobTitle, String mCompanyName, String mWorkedFrom, String mWorkedTill,
-                          String mCityOrCountry, String mTasksPerformed, int userId) {
+    public UserExperience(String id, String mJobTitle, String mCompanyName, String mWorkedFrom, String mWorkedTill,
+                          String mCityOrCountry, String mTasksPerformed, String userId) {
         this.id = id;
         this.mJobTitle = mJobTitle;
         this.mCompanyName = mCompanyName;
@@ -64,11 +55,17 @@ public class UserExperience {
         this.userId = userId;
     }
 
-    public int getId() {
+    @Ignore
+    public UserExperience() {
+        //For Datasnapshots
+    }
+
+    @NonNull
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -126,11 +123,11 @@ public class UserExperience {
         this.mTasksPerformed = mTasksPerformed;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 }
